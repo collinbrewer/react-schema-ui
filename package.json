@@ -1,0 +1,13 @@
+{
+  "name": "react-schema-ui",
+  "version": "0.0.1",
+  "description": "Build Schema-driven UIs in seconds",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://collinbrewer@bitbucket.org/collinbrewer/react-schema-ui.git"
+  },
+  "author": "Collin Brewer <collin@brewer-collective.com>",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/collinbrewer/react-schema-ui#readme"
+}
