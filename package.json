@@ -1,17 +1,20 @@
 {
-  "name": "react-schema-ui",
-  "version": "0.0.2",
-  "description": "Build Schema-driven UIs in seconds",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://collinbrewer@bitbucket.org/collinbrewer/react-schema-ui.git"
-  },
-  "author": "Collin Brewer <collin@brewer-collective.com>",
-  "license": "UNLICENSED",
-  "homepage": "https://bitbucket.org/collinbrewer/react-schema-ui#readme",
-  "dependencies": {
-    "json-pointer": "git+https://collinbrewer@bitbucket.org/collinbrewer/json-pointer.git",
-    "react": "^0.13.3"
-  }
+   "name": "react-schema-ui",
+   "version": "0.0.3",
+   "description": "Build Schema-driven UIs in seconds",
+   "main": "index.js",
+   "repository": {
+      "type": "git",
+      "url": "git+https://collinbrewer@bitbucket.org/collinbrewer/react-schema-ui.git"
+   },
+   "author": "Collin Brewer <collin@brewer-collective.com>",
+   "license": "UNLICENSED",
+   "homepage": "https://bitbucket.org/collinbrewer/react-schema-ui#readme",
+   "dependencies": {
+      "json-pointer": "git+https://collinbrewer@bitbucket.org/collinbrewer/json-pointer.git",
+      "react": "^0.13.3"
+   },
+   "browserify": {
+      "transform": ["reactify"]
+   }
 }
