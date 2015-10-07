@@ -42,12 +42,8 @@ var SchemaRelationshipRow=React.createClass({
 
          rows=this.props.value.map(function(o, i){
 
-            try
-            {
-               title=JSONPointer.evaluate(titlePointer, o, {delimiter:"."});
-               subtitle=JSONPointer.evaluate(subtitlePointer, o, {delimiter:"."});
-            }
-            catch(e){}
+            title=JSONPointer.evaluate(titlePointer, o, {delimiter:".", strict:false, defaultValue:""});
+            subtitle=JSONPointer.evaluate(subtitlePointer, o, {delimiter:".", strict:false, defaultValue:""});
 
             return (
                <div className="row" key={i}>

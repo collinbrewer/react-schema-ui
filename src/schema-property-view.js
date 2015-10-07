@@ -87,10 +87,8 @@ var SchemaPropertyView=React.createClass({
                }
                else
                {
-                  displayValue=JSONPointer.evaluate(meta.displayValuePointer, value, {delimiter:"."});
+                  displayValue=JSONPointer.evaluate(meta.displayValuePointer, value, {delimiter:".", strict:false, defaultValue:""});
                }
-
-
             }
             else
             {
