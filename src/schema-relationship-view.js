@@ -1,7 +1,7 @@
 var React=require("react");
 var JSONPointer=require("json-pointer");
 
-var ValueView=require("./value-view.js");
+var SchemaPropertyValueView=require("./schema-property-value-view.js");
 
 var SchemaRelationshipRow=React.createClass({
 
@@ -19,10 +19,6 @@ var SchemaRelationshipRow=React.createClass({
    render: function(){
 
       var editing=this.props.editing;
-      var editingIndicatorIcon=(editing ? <i className="ion-edit"></i> : null);
-      var editingIndicatorCol=(
-         <div className="col-xs-1 placeholder-text-color">{editingIndicatorIcon}</div>
-      );
 
       var className="row list-view-item";
       editing && (className+=" interactive");
@@ -66,14 +62,9 @@ var SchemaRelationshipRow=React.createClass({
          );
       }
 
-
-
       return (
          <div className={className} onClick={this.wantsEdit}>
-            <div className="col-xs-11">
-               {rows}
-            </div>
-            {editingIndicatorCol}
+            {rows}
          </div>
       );
    },

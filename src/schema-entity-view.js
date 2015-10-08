@@ -12,22 +12,30 @@ var SchemaEntityView=React.createClass({
       return {
          entity: undefined,
          object: undefined,
+         editMode: "form",
          editing: false,
+         editable: false,
          onWantsEditProperty: function(){}
       }
    },
 
    render: function(){
 
-      var entity=this.props.entity;
-      var editing=this.props.editing;
-      var object=this.props.object;
-      var propertyNameWhitelist=(this.props.propertyNameWhitelist || []);
-      var propertyNameBlacklist=(this.props.propertyNameBlacklist || []);
-      var value;
+      var props=this.props;
+      var entity=props.entity;
+      var editMode=props.editMode;
+      var editable=props.editable;
+      var editing=props.editing;
+      var handleWantsEditProperty=props.onWantsEditProperty;
+      var object=props.object;
+      var propertyNameWhitelist=props.propertyNameWhitelist;
+      var propertyNameBlacklist=(props.propertyNameBlacklist || []);
       var properties;
+      var value;
 
-      // whitelist
+      console.log("rendering entity view, editing: ", editing);
+
+      // pull in explicity whitelisted or all
       if(propertyNameWhitelist)
       {
          properties=[];
@@ -42,8 +50,12 @@ var SchemaEntityView=React.createClass({
             }
          });
       }
+      else
+      {
+         properties=entity.getProperties();
+      }
 
-      // blacklist
+      // filter out the blacklist
       if(propertyNameBlacklist)
       {
          properties=properties.filter(function(property){
@@ -51,25 +63,31 @@ var SchemaEntityView=React.createClass({
          });
       }
 
-      // render!
-      var handleWantsEditProperty=this.props.onWantsEditProperty;
-
+      // render the property views
       var propertyViews=properties.map(function(property, i){
 
-         value=object[property.getName()];
+         var propertyName=property.getName();
+
+         value=object ? object[propertyName] : undefined;
 
          return (
             <SchemaPropertyView
                key={i}
                property={property}
                value={value}
+               editMode={editMode}
+               editable={editable}
                editing={editing}
                onWantsEdit={handleWantsEditProperty} />
          );
       });
 
+      var className="rsui-entity-container";
+      editing && (className+=" rsui-entity-container-editing");
+
+
       return (
-         <div className="">
+         <div className={className}>
             {propertyViews}
          </div>
       );

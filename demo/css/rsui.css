@@ -1,0 +1,75 @@
+.rsui-property-value-placeholder
+{
+   color: #aab2bd !important;
+}
+
+.rsui-entity-container
+{
+   border: 1px solid #e6e9ed;
+   padding: 12px;
+   background-color: #fff;
+   border-radius: 4px;
+}
+
+.rsui-property-container
+{
+   margin-bottom: 8px;
+   border-bottom: 1px solid #f5f7fa;
+   padding: 0 2px;
+}
+
+.rsui-property-container:last-child
+{
+   margin-bottom: 0;
+   border-bottom: 0;
+}
+
+.rsui-property-label
+{
+   color: #434a54;
+   font-weight: bold;
+}
+
+.rsui-property-value-container
+{
+   color: #5d9cec;
+}
+
+/* Editable State */
+.rsui-entity-container-editable
+{
+
+}
+
+.rsui-property-container-editable
+{
+   border: 1px dashed #e6e9ed;
+   cursor: pointer;
+}
+
+.rsui-property-container-editable:hover
+{
+   background-color: rgba(79, 193, 233, 0.1);
+}
+
+.rsui-property-value-container-editable
+{
+
+}
+
+/* Editing State */
+.rsui-entity-container-editing
+{
+
+}
+
+.rsui-property-container-editing
+{
+   border: 0;
+   cursor: default;
+}
+
+.rsui-property-value-container-editing
+{
+
+}

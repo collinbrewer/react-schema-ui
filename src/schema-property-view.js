@@ -2,7 +2,7 @@ var React=require("react");
 var SchemaAttributeView=require("./schema-attribute-view.js");
 var SchemaRelationshipView=require("./schema-relationship-view.js");
 var JSONPointer=require("json-pointer");
-var ValueView=require("./value-view.js");
+var SchemaPropertyValueView=require("./schema-property-value-view.js");
 
 function camelCaseToTitleCase(camelCase){
 
@@ -45,6 +45,7 @@ var SchemaPropertyView=React.createClass({
          "placeholder" : "",
          "value" : undefined,
          "displayValue" : "",
+         "editMode" : "form",
          "editable" : false,
          "editing" : false,
          "onWantsEdit" : function(){}
@@ -63,12 +64,19 @@ var SchemaPropertyView=React.createClass({
 
       var view;
       var props=this.props;
+      var editMode=props.editMode;
+      var editable=props.editable;
+      var editing=this.state.editing;
       var property=props.property;
-      var meta=property.getDefinition().meta;
+      var meta=property.getDefinition().meta || {};
       var value=props.value;
       var type=property.getType();
-      var displayValue=props.displayValue || (meta ? meta.displayValue : value);
-      var displayName=props.displayName || (meta ? meta.displayName : camelCaseToTitleCase(property.getName()));
+      var displayValue=props.displayValue || meta.displayValue || value;
+      var displayName=props.displayName || meta.displayName || camelCaseToTitleCase(property.getName());
+      var displayType;
+      var placeholder=props.placeholder || meta.placeholder;
+
+      console.log("rendering property view, editing: ", editing);
 
       switch(type)
       {
@@ -78,6 +86,8 @@ var SchemaPropertyView=React.createClass({
             var destinationEntity=property.getDestinationEntity();
             var definition=destinationEntity.getDefinition();
             var meta=definition.meta;
+
+            displayType="string";
 
             if(meta && meta.displayValuePointer)
             {
@@ -98,7 +108,6 @@ var SchemaPropertyView=React.createClass({
                }
                else
                {
-
                   displayValue=value || "";
                }
             }
@@ -106,19 +115,61 @@ var SchemaPropertyView=React.createClass({
             break;
          }
 
+         // attribute
          default :
          {
+            var attributeType=property.getAttributeType();
 
+            if(attributeType==="boolean")
+            {
+               displayType="checkbox";
+            }
+            else
+            {
+               displayType="string";
+            }
+
+            placeholder===undefined && (placeholder=attributeType);
          }
       }
 
+      var className="rsui-property-container";
+      editable && (className+=" rsui-property-container-editable");
+      editing && (className+=" rsui-property-container-editing");
+
+      var inlineEditingControls;
+
+      if(editMode==="inline" && editing===true)
+      {
+         inlineEditingControls=(
+            <span>
+               <span className="">
+                  <a href="#" onClick={this.cancelInlineEdit}><i className="ion-ios-close-outline" /></a>
+               </span>
+               <span className="">
+                  <a href="#" onClick={this.confirmInlineEdit}><i className="ion-ios-checkmark-outline" /></a>
+               </span>
+            </span>
+         );
+      }
+
       return (
-         <ValueView
-            displayName={displayName}
-            displayValue={displayValue}
-            editable={this.props.editing}
-            onWantsEdit={this.handleWantsEdit}
-            onChange={this.handleChange} />
+         <div className={className} onClick={this.handleClick}>
+            <label className="rsui-property-label" htmlFor={property.getName()}>{displayName}</label>
+            <SchemaPropertyValueView
+               displayName={displayName}
+               value={displayValue}
+               displayType={displayType}
+               placeholder={placeholder}
+               editMode={editMode}
+               editable={editable}
+               editing={editing}
+               onWantsEdit={this.handleWantsEdit}
+               onWantsCancelEdit={this.cancelInlineEdit}
+               onWantsConfirmEdit={this.confirmInlineEdit}
+               onChange={this.handleChange} />
+            {inlineEditingControls}
+         </div>
       );
    },
 
@@ -142,23 +193,46 @@ var SchemaPropertyView=React.createClass({
 
       console.log("changed!", arguments);
 
-
       // apply the change, dispatch across the board and trigger ui re-render
       // ParseReact.Mutation.Set(this.account, {title:title}).dispatch();
    },
 
-   confirm: function(e){
+   handleClick: function(e){
+
+      if(this.props.editable && this.props.editMode==="inline" && !this.state.editing)
+      {
+         console.log("editing inline!");
+
+         var shouldEdit=this.props.onWantsEdit(this.props.property, e);
+
+         if(shouldEdit===false)
+         {
+
+         }
+         else
+         {
+            this.setState({
+               editing: true
+            });
+         }
+      }
+   },
+
+   confirmInlineEdit: function(e){
 
       e.preventDefault();
 
-      this.props.onChange(this.props.property, this.state.value);
+      if(this.props.editMode==="inline")
+      {
+         // this.props.onChange(this.props.property, this.state.value);
 
-      this.setState({
-         editing: false
-      });
+         this.setState({
+            editing: false
+         });
+      }
    },
 
-   cancel: function(e){
+   cancelInlineEdit: function(e){
 
       e.preventDefault();
 
