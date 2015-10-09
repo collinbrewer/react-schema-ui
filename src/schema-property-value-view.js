@@ -10,8 +10,8 @@ var SchemaPropertyValueView=React.createClass({
          "placeholder" : "",
          "editMode" : "form",
          "editable" : false,
-         "onWantsConfirmEdit" : function(){},
-         "onWantsCancelEdit" : function(){},
+         "onWantsConfirmInlineEdit" : function(){},
+         "onWantsCancelInlineEdit" : function(){},
          "onChange" : function(){}
       };
    },
@@ -82,9 +82,26 @@ var SchemaPropertyValueView=React.createClass({
             );
          }
 
+         var inlineEditingControls;
+
+         if(editMode==="inline" && editing===true)
+         {
+            inlineEditingControls=(
+               <span>
+                  <span className="">
+                     <a href="#" onClick={this.handleClickCancelInlineEdit}><i className="ion-ios-close-outline" /></a>
+                  </span>
+                  <span className="">
+                     <a href="#" onClick={this.handleClickConfirmInlineEdit}><i className="ion-ios-checkmark-outline" /></a>
+                  </span>
+               </span>
+            );
+         }
+
          view=(
             <div>
                {display}
+               {inlineEditingControls}
             </div>
          );
       }
@@ -117,17 +134,44 @@ var SchemaPropertyValueView=React.createClass({
 
    handleChange: function(e){
 
-      this.setState({
-         value: e.target.value
-      });
+      if(this.props.editMode==="inline")
+      {
+         this.setState({
+            value: e.target.value
+         });
+      }
+      else
+      {
+         this.props.onChange(e.target.value);
+      }
    },
 
    handleBlur: function(e){
 
-      if(this.props.value===this.state.value)
+      if(this.props.editMode==="inline" && this.props.value===this.state.value)
       {
          this.props.onWantsCancelEdit(e);
       }
+   },
+
+   handleClickConfirmInlineEdit: function(e){
+
+      e.preventDefault();
+
+      this.props.onChange(this.state.value);
+
+      this.props.onWantsConfirmInlineEdit(this.state.value, e);
+   },
+
+   handleClickCancelInlineEdit: function(e){
+
+      e.preventDefault();
+
+      this.setState({
+         value: this.props.value
+      });
+
+      this.props.onWantsCancelInlineEdit(e);
    }
 });
 

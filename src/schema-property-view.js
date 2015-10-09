@@ -76,8 +76,6 @@ var SchemaPropertyView=React.createClass({
       var displayType;
       var placeholder=props.placeholder || meta.placeholder;
 
-      console.log("rendering property view, editing: ", editing);
-
       switch(type)
       {
          case "relationship" :
@@ -137,22 +135,6 @@ var SchemaPropertyView=React.createClass({
       editable && (className+=" rsui-property-container-editable");
       editing && (className+=" rsui-property-container-editing");
 
-      var inlineEditingControls;
-
-      if(editMode==="inline" && editing===true)
-      {
-         inlineEditingControls=(
-            <span>
-               <span className="">
-                  <a href="#" onClick={this.cancelInlineEdit}><i className="ion-ios-close-outline" /></a>
-               </span>
-               <span className="">
-                  <a href="#" onClick={this.confirmInlineEdit}><i className="ion-ios-checkmark-outline" /></a>
-               </span>
-            </span>
-         );
-      }
-
       return (
          <div className={className} onClick={this.handleClick}>
             <label className="rsui-property-label" htmlFor={property.getName()}>{displayName}</label>
@@ -164,11 +146,9 @@ var SchemaPropertyView=React.createClass({
                editMode={editMode}
                editable={editable}
                editing={editing}
-               onWantsEdit={this.handleWantsEdit}
-               onWantsCancelEdit={this.cancelInlineEdit}
-               onWantsConfirmEdit={this.confirmInlineEdit}
+               onWantsCancelInlineEdit={this.cancelInlineEdit}
+               onWantsConfirmInlineEdit={this.confirmInlineEdit}
                onChange={this.handleChange} />
-            {inlineEditingControls}
          </div>
       );
    },
@@ -189,20 +169,15 @@ var SchemaPropertyView=React.createClass({
       return shouldInlineEdit;
    },
 
-   handleChange: function(){
+   handleChange: function(value){
 
-      console.log("changed!", arguments);
-
-      // apply the change, dispatch across the board and trigger ui re-render
-      // ParseReact.Mutation.Set(this.account, {title:title}).dispatch();
+      this.props.onChange(value);
    },
 
    handleClick: function(e){
 
       if(this.props.editable && this.props.editMode==="inline" && !this.state.editing)
       {
-         console.log("editing inline!");
-
          var shouldEdit=this.props.onWantsEdit(this.props.property, e);
 
          if(shouldEdit===false)
@@ -218,28 +193,19 @@ var SchemaPropertyView=React.createClass({
       }
    },
 
-   confirmInlineEdit: function(e){
-
-      e.preventDefault();
-
-      if(this.props.editMode==="inline")
-      {
-         // this.props.onChange(this.props.property, this.state.value);
-
-         this.setState({
-            editing: false
-         });
-      }
-   },
-
-   cancelInlineEdit: function(e){
-
-      e.preventDefault();
+   confirmInlineEdit: function(value, e){
 
       this.setState({
          editing: false
       });
-   }
+   },
+
+   cancelInlineEdit: function(){
+
+      this.setState({
+         editing: false
+      })
+   },
 });
 
 module.exports=SchemaPropertyView;

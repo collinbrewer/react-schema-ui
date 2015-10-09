@@ -33,8 +33,6 @@ var SchemaEntityView=React.createClass({
       var properties;
       var value;
 
-      console.log("rendering entity view, editing: ", editing);
-
       // pull in explicity whitelisted or all
       if(propertyNameWhitelist)
       {

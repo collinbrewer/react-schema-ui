@@ -68,7 +68,8 @@ var Demo=React.createClass({
                      entity={todoEntitySchema}
                      object={todo}
                      editMode="form"
-                     editing={true} />
+                     editing={true}
+                     onChange={this.handleChange} />
                </div>
             </div>
             <div className="row">
@@ -78,11 +79,18 @@ var Demo=React.createClass({
                      entity={todoEntitySchema}
                      object={todo}
                      editMode="inline"
-                     editable={true} />
+                     editable={true}
+                     onChange={this.handleChange} />
                </div>
             </div>
          </div>
       );
+   },
+
+   handleChange: function(property, value){
+
+      console.log(arguments);
+
    }
 });
 
