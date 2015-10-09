@@ -69,7 +69,7 @@ var Demo=React.createClass({
                      object={todo}
                      editMode="form"
                      editing={true}
-                     onChange={this.handleChange} />
+                     onChangeProperty={this.handleChangeProperty} />
                </div>
             </div>
             <div className="row">
@@ -80,14 +80,14 @@ var Demo=React.createClass({
                      object={todo}
                      editMode="inline"
                      editable={true}
-                     onChange={this.handleChange} />
+                     onChangeProperty={this.handleChangeProperty} />
                </div>
             </div>
          </div>
       );
    },
 
-   handleChange: function(property, value){
+   handleChangeProperty: function(property, value){
 
       console.log(arguments);
 

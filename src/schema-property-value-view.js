@@ -78,6 +78,7 @@ var SchemaPropertyValueView=React.createClass({
                   onKeyDown={this.handleKeyDown}
                   onChange={this.handleChange}
                   onBlur={this.handleBlur}
+                  autoFocus={this.props.focus ? "autofocus" : ""}
                />
             );
          }
@@ -150,7 +151,7 @@ var SchemaPropertyValueView=React.createClass({
 
       if(this.props.editMode==="inline" && this.props.value===this.state.value)
       {
-         this.props.onWantsCancelEdit(e);
+         this.props.onWantsCancelInlineEdit(e);
       }
    },
 
@@ -158,7 +159,10 @@ var SchemaPropertyValueView=React.createClass({
 
       e.preventDefault();
 
-      this.props.onChange(this.state.value);
+      if(this.props.editMode==="inline" && this.props.value!==this.state.value)
+      {
+         this.props.onChange(this.state.value);
+      }
 
       this.props.onWantsConfirmInlineEdit(this.state.value, e);
    },

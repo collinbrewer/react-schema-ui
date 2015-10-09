@@ -15,7 +15,8 @@ var SchemaEntityView=React.createClass({
          editMode: "form",
          editing: false,
          editable: false,
-         onWantsEditProperty: function(){}
+         onWantsEditProperty: function(){},
+         onChange: function(){}
       }
    },
 
@@ -62,6 +63,8 @@ var SchemaEntityView=React.createClass({
       }
 
       // render the property views
+      var handleChangeProperty=this.props.onChangeProperty;
+
       var propertyViews=properties.map(function(property, i){
 
          var propertyName=property.getName();
@@ -76,7 +79,8 @@ var SchemaEntityView=React.createClass({
                editMode={editMode}
                editable={editable}
                editing={editing}
-               onWantsEdit={handleWantsEditProperty} />
+               onWantsEdit={handleWantsEditProperty}
+               onChange={handleChangeProperty} />
          );
       });
 

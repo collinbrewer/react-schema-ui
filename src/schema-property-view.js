@@ -48,7 +48,8 @@ var SchemaPropertyView=React.createClass({
          "editMode" : "form",
          "editable" : false,
          "editing" : false,
-         "onWantsEdit" : function(){}
+         "onWantsEdit" : function(){},
+         "onChange" : function(){}
       };
    },
 
@@ -148,7 +149,8 @@ var SchemaPropertyView=React.createClass({
                editing={editing}
                onWantsCancelInlineEdit={this.cancelInlineEdit}
                onWantsConfirmInlineEdit={this.confirmInlineEdit}
-               onChange={this.handleChange} />
+               onChange={this.handleChange}
+               focus={editMode==="inline"} />
          </div>
       );
    },
