@@ -70,6 +70,7 @@ var SchemaEntityView=React.createClass({
          var propertyName=property.getName();
 
          value=object ? object[propertyName] : undefined;
+         value && (value=value.toString());
 
          return (
             <SchemaPropertyView

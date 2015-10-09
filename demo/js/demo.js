@@ -31,8 +31,7 @@ var Demo=React.createClass({
                      "name":"dateCreated",
                      "type":"date",
                      "meta" : {
-                        "displayName" : "Created On",
-                        "placeholder" : "mm-dd-yy"
+                        "displayName" : "Created On"
                      }
                   },
 
@@ -45,9 +44,16 @@ var Demo=React.createClass({
          ]
       });
 
-      var todo={
-         title: "Use RSUI!",
-      };
+      var todo=this.todo;
+
+      if(!todo)
+      {
+         todo={
+            title: "Use RSUI!"
+         };
+
+         this.todo=todo;
+      }
 
       var todoEntitySchema=objectGraphSchema.getEntitiesByName()["Todo"];
 
@@ -80,17 +86,35 @@ var Demo=React.createClass({
                      object={todo}
                      editMode="inline"
                      editable={true}
-                     onChangeProperty={this.handleChangeProperty} />
+                     onChangeProperty={this.handleChangeProperty}
+                     onWantsEditProperty={this.handleWantsEditProperty} />
                </div>
             </div>
          </div>
       );
    },
 
+   handleWantsEditProperty: function(property){
+
+      var propertyName=property.getName();
+
+      if(propertyName==="dateCreated")
+      {
+         var d=prompt("Intercepted request to edit property... \n\nPlease type a date in format YYYY-MM-DD:");
+
+         this.todo["dateCreated"]=new Date(d);
+
+         this.forceUpdate();
+
+         return false;
+      }
+   },
+
    handleChangeProperty: function(property, value){
 
-      console.log(arguments);
+      this.todo[property.getName()]=value;
 
+      this.forceUpdate();
    }
 });
 

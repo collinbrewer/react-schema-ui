@@ -25,15 +25,31 @@ var SchemaPropertyValueView=React.createClass({
       };
    },
 
+   componentWillReceiveProps: function(nextProps){
+
+      if(nextProps.editing)
+      {
+         this.setState({
+            value: this.props.value
+         });
+      }
+   },
+
    render: function(){
 
       var view;
-      var displayValue=this.state.value;
-      var displayType=this.props.displayType;
       var editMode=this.props.editMode;
       var editable=this.props.editable;
       var editing=this.props.editing;
+      var displayValue=((editMode==="inline" && editing) ? this.state.value : (this.props.value || this.state.value));
+      var displayType=this.props.displayType;
       var placeholder=this.props.placeholder;
+
+      // {
+      //    console.log("can't decide what to render");
+      //    console.log("props value: ", this.props.value);
+      //    console.log("state value: ", this.state.value);
+      // }
 
       var className="rsui-property-value-container"
       editable && (className+=" rsui-property-value-container-editable");
@@ -114,15 +130,20 @@ var SchemaPropertyValueView=React.createClass({
 
       var keyCode=e.keyCode;
 
-      if(keyCode===13)
+      if(this.props.editMode==="inline")
       {
-         var value=React.findDOMNode(this.refs.title).value;
+         if(keyCode===13)
+         {
+            var value=e.target.value;
 
-         this.props.onWantsConfirmEdit(value);
-      }
-      else if(keyCode===27)
-      {
-         this.props.onWantsCancelEdit(e);
+            this.commitInlineEditChanges();
+
+            this.props.onWantsConfirmInlineEdit(value);
+         }
+         else if(keyCode===27)
+         {
+            this.handleClickCancelInlineEdit(e);
+         }
       }
    },
 
@@ -135,6 +156,7 @@ var SchemaPropertyValueView=React.createClass({
 
    handleChange: function(e){
 
+      // if the edit mode is inline, we'll apply the changes internally
       if(this.props.editMode==="inline")
       {
          this.setState({
@@ -149,31 +171,49 @@ var SchemaPropertyValueView=React.createClass({
 
    handleBlur: function(e){
 
-      if(this.props.editMode==="inline" && this.props.value===this.state.value)
+      // if we're inline editing and nothing has changed, just cancel the edit
+      if(this.props.editMode==="inline" && this.props.editing && this.props.value===this.state.value)
       {
          this.props.onWantsCancelInlineEdit(e);
       }
+   },
+
+   commitInlineEditChanges: function(){
+
+      if(this.props.editMode==="inline" && this.props.value!==this.state.value)
+      {
+         this.props.onChange(this.state.value);
+         this.props.onWantsConfirmInlineEdit(this.state.value);
+         this.setState({
+            value: undefined
+         });
+      }
+   },
+
+   revertInlineEditChanges: function(){
+
+      this.setState({
+         value: undefined
+      });
    },
 
    handleClickConfirmInlineEdit: function(e){
 
       e.preventDefault();
 
+      console.log("wants commit changes", this.props.value, this.state.value);
+
       if(this.props.editMode==="inline" && this.props.value!==this.state.value)
       {
-         this.props.onChange(this.state.value);
+         this.commitInlineEditChanges();
       }
-
-      this.props.onWantsConfirmInlineEdit(this.state.value, e);
    },
 
    handleClickCancelInlineEdit: function(e){
 
       e.preventDefault();
 
-      this.setState({
-         value: this.props.value
-      });
+      this.revertInlineEditChanges();
 
       this.props.onWantsCancelInlineEdit(e);
    }

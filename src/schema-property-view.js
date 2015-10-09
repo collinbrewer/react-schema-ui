@@ -173,7 +173,7 @@ var SchemaPropertyView=React.createClass({
 
    handleChange: function(value){
 
-      this.props.onChange(value);
+      this.props.onChange(this.props.property, value);
    },
 
    handleClick: function(e){
@@ -182,11 +182,7 @@ var SchemaPropertyView=React.createClass({
       {
          var shouldEdit=this.props.onWantsEdit(this.props.property, e);
 
-         if(shouldEdit===false)
-         {
-
-         }
-         else
+         if(shouldEdit!==false)
          {
             this.setState({
                editing: true
