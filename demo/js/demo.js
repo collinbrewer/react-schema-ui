@@ -100,7 +100,7 @@ var Demo=React.createClass({
 
       if(propertyName==="dateCreated")
       {
-         var d=prompt("Intercepted request to edit property... \n\nPlease type a date in format YYYY-MM-DD:");
+         var d=prompt("Intercepted request to edit property!! \n\nPlease type a date in format YYYY-MM-DD:");
 
          this.todo["dateCreated"]=new Date(d);
 
