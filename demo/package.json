@@ -8,8 +8,5 @@
   },
   "author": "Collin Brewer <collin@brewer-collective.com>",
   "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "react": "^0.14.0"
-  }
+  "private": true
 }

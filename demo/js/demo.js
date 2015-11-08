@@ -1,6 +1,5 @@
 var React=require("react");
 var ObjectGraphSchema=require("object-graph-schema");
-
 var ReactSchemaUI=require("../../index.js");
 var SchemaEntityView=ReactSchemaUI.SchemaEntityView;
 
@@ -36,10 +35,29 @@ var Demo=React.createClass({
                   },
 
                   {
+                     "name":"creator",
+                     "type":"relationship",
+                     "entityName" : "User",
+                  },
+
+                  {
                      "name":"completed",
                      "type":"boolean"
                   }
                ]
+            },
+
+            {
+               "name" : "User",
+               "properties" : [
+                  {
+                     "name" : "name",
+                     "type" : "string"
+                  }
+               ],
+               "meta" : {
+                  displayValuePointer: "name"
+               }
             }
          ]
       });
@@ -49,7 +67,10 @@ var Demo=React.createClass({
       if(!todo)
       {
          todo={
-            title: "Use RSUI!"
+            title: "Use RSUI!",
+            creator : {
+               name: "Chris Ericson"
+            }
          };
 
          this.todo=todo;
@@ -63,6 +84,7 @@ var Demo=React.createClass({
                <div className="col-xs-12">
                   <h1>Readonly</h1>
                   <SchemaEntityView
+                     key={1}
                      entity={todoEntitySchema}
                      object={todo} />
                </div>
@@ -71,6 +93,7 @@ var Demo=React.createClass({
                <div className="col-xs-12">
                   <h1>Form Editing</h1>
                   <SchemaEntityView
+                     key={2}
                      entity={todoEntitySchema}
                      object={todo}
                      editMode="form"
@@ -82,6 +105,7 @@ var Demo=React.createClass({
                <div className="col-xs-12">
                   <h1>Inline Editing</h1>
                   <SchemaEntityView
+                     key={3}
                      entity={todoEntitySchema}
                      object={todo}
                      editMode="inline"

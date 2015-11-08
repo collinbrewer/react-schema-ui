@@ -1,6 +1,6 @@
 {
    "name": "react-schema-ui",
-   "version": "0.0.7",
+   "version": "0.0.8",
    "description": "Build Schema-driven UIs in seconds",
    "main": "index.js",
    "repository": {
