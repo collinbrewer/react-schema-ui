@@ -87,7 +87,6 @@ var SchemaEntityView=React.createClass({
       var className="rsui-entity-container";
       editing && (className+=" rsui-entity-container-editing");
 
-
       return (
          <div className={className}>
             {propertyViews}

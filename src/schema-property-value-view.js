@@ -45,11 +45,11 @@ var SchemaPropertyValueView=React.createClass({
       var displayType=this.props.displayType;
       var placeholder=this.props.placeholder;
 
-      // {
-      //    console.log("can't decide what to render");
-      //    console.log("props value: ", this.props.value);
-      //    console.log("state value: ", this.state.value);
-      // }
+      // make sure the display value is renderable
+      if(typeof(displayValue)==="object")
+      {
+         displayValue=displayValue.toString();
+      }
 
       var className="rsui-property-value-container"
       editable && (className+=" rsui-property-value-container-editable");
