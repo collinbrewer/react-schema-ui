@@ -46,7 +46,7 @@ var SchemaPropertyValueView=React.createClass({
       var placeholder=this.props.placeholder;
 
       // make sure the display value is renderable
-      if(typeof(displayValue)==="object")
+      if(displayValue && typeof(displayValue)==="object")
       {
          displayValue=displayValue.toString();
       }
