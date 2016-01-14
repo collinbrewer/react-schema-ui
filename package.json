@@ -1,34 +1,35 @@
 {
-   "name": "react-schema-ui",
-   "version": "0.0.91",
-   "description": "Build Schema-driven UIs in seconds",
-   "main": "index.js",
-   "repository": {
-      "type": "git",
-      "url": "git+https://collinbrewer@bitbucket.org/collinbrewer/react-schema-ui.git"
-   },
-   "author": "Collin Brewer <collin@brewer-collective.com>",
-   "license": "UNLICENSED",
-   "homepage": "https://bitbucket.org/collinbrewer/react-schema-ui#readme",
-   "dependencies": {
-      "json-pointer": "git+https://collinbrewer@bitbucket.org/collinbrewer/json-pointer.git",
-      "object-graph-schema": "git+https://collinbrewer@bitbucket.org/collinbrewer/object-graph-schema.git",
-      "react": "^0.13.3"
-   },
-   "browserify": {
-      "transform": [
-         "reactify"
-      ]
-   },
-   "devDependencies": {
-      "browser-sync": "^2.9.10",
-      "browserify": "^11.2.0",
-      "gulp": "^3.9.0",
-      "gulp-shell": "^0.5.0",
-      "reactify": "^1.1.1",
-      "vinyl-buffer": "^1.0.0",
-      "vinyl-source-stream": "^1.1.0",
-      "watchify": "^3.4.0"
-   },
-   "private": true
+  "name": "react-schema-ui",
+  "version": "0.0.92",
+  "description": "Build Schema-driven UIs in seconds",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://collinbrewer@bitbucket.org/collinbrewer/react-schema-ui.git"
+  },
+  "author": "Collin Brewer <collin@brewer-collective.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://bitbucket.org/collinbrewer/react-schema-ui#readme",
+  "dependencies": {
+    "json-pointer": "git+https://collinbrewer@bitbucket.org/collinbrewer/json-pointer.git",
+    "object-graph-schema": "git+https://collinbrewer@bitbucket.org/collinbrewer/object-graph-schema.git",
+    "react": "^0.14"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  },
+  "devDependencies": {
+    "browser-sync": "^2.9.10",
+    "browserify": "^11.2.0",
+    "gulp": "^3.9.0",
+    "gulp-shell": "^0.5.0",
+    "react-dom": "^0.14.6",
+    "reactify": "^1.1.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  },
+  "private": true
 }

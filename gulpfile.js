@@ -42,7 +42,9 @@ function buildJS() {
 
    var browserifyBundler = browserify({
          entries: ["./demo/main.js"],
-         debug: true
+         debug: true,
+         package: {},
+         cache: {}
       })
       .transform(reactify);
 
