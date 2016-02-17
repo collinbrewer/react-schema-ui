@@ -79,6 +79,7 @@ var SchemaEntityView=React.createClass({
                editMode={editMode}
                editable={editable}
                editing={editing}
+               displayValueTransformer={props.displayValueTransformer}
                onWantsEdit={handleWantsEditProperty}
                onChange={handleChangeProperty} />
          );

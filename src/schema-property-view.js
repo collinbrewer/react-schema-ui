@@ -1,39 +1,24 @@
 var React=require("react");
+
 var SchemaAttributeView=require("./schema-attribute-view.js");
 var SchemaRelationshipView=require("./schema-relationship-view.js");
-var JSONPointer=require("json-pointer");
 var SchemaPropertyValueView=require("./schema-property-value-view.js");
+var camelCaseToTitleCase=require("./util/camel-case-to-title-case.js");
 
-function camelCaseToTitleCase(camelCase){
+var getDisplayTypeForProperty=function(property){
 
-   if (camelCase == null || camelCase == "")
+   var displayType="string";
+
+   if(property.getType()==="attribute")
    {
-      return camelCase;
-   }
-
-   camelCase = camelCase.trim();
-
-   var newText = "";
-
-   for (var i = 0; i < camelCase.length; i++)
-   {
-      if (/[A-Z]/.test(camelCase[i]) && i != 0 && /[a-z]/.test(camelCase[i-1]))
+      if(property.getAttributeType()==="boolean")
       {
-         newText += " ";
-      }
-
-      if (i == 0 && /[a-z]/.test(camelCase[i]))
-      {
-        newText += camelCase[i].toUpperCase();
-      }
-      else
-      {
-        newText += camelCase[i];
+         displayType="checkbox";
       }
    }
 
-   return newText;
-}
+   return displayType;
+};
 
 var SchemaPropertyView=React.createClass({
 
@@ -72,65 +57,10 @@ var SchemaPropertyView=React.createClass({
       var meta=property.getDefinition().meta || {};
       var value=props.value;
       var type=property.getType();
-      var displayValue=props.displayValue || meta.displayValue || value;
       var displayName=props.displayName || meta.displayName || camelCaseToTitleCase(property.getName());
-      var displayType;
-      var placeholder=props.placeholder || meta.placeholder;
-
-      switch(type)
-      {
-         case "relationship" :
-         {
-            var entityName=property.getEntityName();
-            var destinationEntity=property.getDestinationEntity();
-            var definition=destinationEntity.getDefinition();
-            var meta=definition.meta;
-
-            displayType="string";
-
-            if(meta && meta.displayValuePointer)
-            {
-               if(property.toMany)
-               {
-                  displayValue=value.length + " " + entityName + "(s)";
-               }
-               else
-               {
-                  displayValue=JSONPointer.evaluate(meta.displayValuePointer, value, {delimiter:".", strict:false, defaultValue:""});
-               }
-            }
-            else
-            {
-               if(property.toMany)
-               {
-                  displayValue=value.length + " " + entityName + "(s)";
-               }
-               else
-               {
-                  displayValue=value || "";
-               }
-            }
-
-            break;
-         }
-
-         // attribute
-         default :
-         {
-            var attributeType=property.getAttributeType();
-
-            if(attributeType==="boolean")
-            {
-               displayType="checkbox";
-            }
-            else
-            {
-               displayType="string";
-            }
-
-            placeholder===undefined && (placeholder=attributeType);
-         }
-      }
+      // var displayValue=defaultDisplayValueTransformer(property, value, this.props.displayValueTransformer);//props.displayValue || meta.displayValue || value;
+      var displayType=getDisplayTypeForProperty(property);
+      var placeholder=props.placeholder || meta.placeholder || (property.getType()==="attribute" ? property.getAttributeType() : property.getDestinationEntity().getName());
 
       var className="rsui-property-container";
       editable && (className+=" rsui-property-container-editable");
@@ -141,12 +71,14 @@ var SchemaPropertyView=React.createClass({
             <label className="rsui-property-label" htmlFor={property.getName()}>{displayName}</label>
             <SchemaPropertyValueView
                displayName={displayName}
-               value={displayValue}
+               value={value}
                displayType={displayType}
                placeholder={placeholder}
                editMode={editMode}
                editable={editable}
                editing={editing}
+               property={property}
+               displayValueTransformer={this.props.displayValueTransformer}
                onWantsCancelInlineEdit={this.cancelInlineEdit}
                onWantsConfirmInlineEdit={this.confirmInlineEdit}
                onChange={this.handleChange}

@@ -1,6 +1,6 @@
 {
   "name": "react-schema-ui-demo",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A demo of the React Schema UI components.",
   "main": "main.js",
   "scripts": {

@@ -78,6 +78,22 @@ var Demo=React.createClass({
 
       var todoEntitySchema=objectGraphSchema.getEntitiesByName()["Todo"];
 
+      var dateTransformer=function(p, v, d){
+
+         if(p.getType()==="attribute" && p.getAttributeType()==="date")
+         {
+            if(v)
+            {
+               console.log("custom transformer: ", arguments);
+               console.log("transforming: ", v);
+               d=["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][v.getMonth()] + " " +
+                 v.getDate() + ", " + v.getFullYear();
+            }
+         }
+
+         return d;
+      };
+
       return (
          <div className="container">
             <div className="row">
@@ -86,6 +102,7 @@ var Demo=React.createClass({
                   <SchemaEntityView
                      key={1}
                      entity={todoEntitySchema}
+                     displayValueTransformer={dateTransformer}
                      object={todo} />
                </div>
             </div>
@@ -98,6 +115,7 @@ var Demo=React.createClass({
                      object={todo}
                      editMode="form"
                      editing={true}
+                     displayValueTransformer={dateTransformer}
                      onChangeProperty={this.handleChangeProperty} />
                </div>
             </div>
@@ -110,6 +128,7 @@ var Demo=React.createClass({
                      object={todo}
                      editMode="inline"
                      editable={true}
+                     displayValueTransformer={dateTransformer}
                      onChangeProperty={this.handleChangeProperty}
                      onWantsEditProperty={this.handleWantsEditProperty} />
                </div>
@@ -126,9 +145,12 @@ var Demo=React.createClass({
       {
          var d=prompt("Intercepted request to edit property!! \n\nPlease type a date in format YYYY-MM-DD:");
 
-         this.todo["dateCreated"]=new Date(d);
+         if(d)
+         {
+            this.todo["dateCreated"]=new Date(d.substr(0, 4), (+d.substr(5, 2))-1, d.substr(8, 2));
 
-         this.forceUpdate();
+            this.forceUpdate();
+         }
 
          return false;
       }

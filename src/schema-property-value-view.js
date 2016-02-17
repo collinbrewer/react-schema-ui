@@ -1,5 +1,54 @@
 var React=require("react");
 
+var JSONPointer=require("json-pointer");
+
+/**
+ * defaultDisplayValueTransformer
+ */
+var defaultDisplayValueTransformer=function(property, value, transformer){
+
+   var displayValue=value;
+   var type=property.getType();
+
+   switch(type)
+   {
+      case "relationship" : // TODO: what about fetched?
+      {
+         var entityName=property.getEntityName();
+         var destinationEntity=property.getDestinationEntity();
+         var definition=destinationEntity.getDefinition();
+         var meta=definition.meta;
+
+         if(meta && meta.displayValuePointer)
+         {
+            if(property.toMany)
+            {
+               displayValue=value.length + " " + entityName + "(s)";
+            }
+            else
+            {
+               displayValue=JSONPointer.evaluate(meta.displayValuePointer, value, {delimiter:".", strict:false, defaultValue:""});
+            }
+         }
+         else
+         {
+            if(property.toMany)
+            {
+               displayValue=value.length + " " + entityName + "(s)";
+            }
+            else
+            {
+               displayValue=value || "";
+            }
+         }
+
+         break;
+      }
+   }
+
+   return transformer(property, value, displayValue);
+};
+
 var SchemaPropertyValueView=React.createClass({
 
    getDefaultProps: function(){
@@ -10,6 +59,7 @@ var SchemaPropertyValueView=React.createClass({
          "placeholder" : "",
          "editMode" : "form",
          "editable" : false,
+         "displayValueTransformer" : function(p, v, d){ console.log("SchemaPropertyValueView.displayValueTransformer: ", arguments); return d; },
          "onWantsConfirmInlineEdit" : function(){},
          "onWantsCancelInlineEdit" : function(){},
          "onChange" : function(){}
@@ -41,15 +91,10 @@ var SchemaPropertyValueView=React.createClass({
       var editMode=this.props.editMode;
       var editable=this.props.editable;
       var editing=this.props.editing;
-      var displayValue=((editMode==="inline" && editing) ? this.state.value : (this.props.value || this.state.value));
+      var value=((editMode==="inline" && editing) ? this.state.value : this.props.value || this.state.value);
+      var displayValue=defaultDisplayValueTransformer(this.props.property, value, this.props.displayValueTransformer);
       var displayType=this.props.displayType;
       var placeholder=this.props.placeholder;
-
-      // make sure the display value is renderable
-      if(displayValue && typeof(displayValue)==="object")
-      {
-         displayValue=displayValue.toString();
-      }
 
       var className="rsui-property-value-container"
       editable && (className+=" rsui-property-value-container-editable");
@@ -200,8 +245,6 @@ var SchemaPropertyValueView=React.createClass({
    handleClickConfirmInlineEdit: function(e){
 
       e.preventDefault();
-
-      console.log("wants commit changes", this.props.value, this.state.value);
 
       if(this.props.editMode==="inline" && this.props.value!==this.state.value)
       {

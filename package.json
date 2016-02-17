@@ -24,6 +24,7 @@
     "browser-sync": "^2.9.10",
     "browserify": "^11.2.0",
     "gulp": "^3.9.0",
+    "gulp-notify": "^2.2.0",
     "gulp-shell": "^0.5.0",
     "react-dom": "^0.14.6",
     "reactify": "^1.1.1",

@@ -6,6 +6,7 @@ var buffer = require('vinyl-buffer');
 var shell = require("gulp-shell");
 var reactify = require("reactify");
 var browserSync = require("browser-sync");
+var notify=require("gulp-notify");
 var reload = browserSync.reload;
 
 var watch;
@@ -63,8 +64,17 @@ function buildJS() {
 
 function buildWithBrowserifyBundler(browserifyBundler) {
 
+   var handleError=function(e){
+      notify.onError({
+         title: "Build Error",
+         subtitle: "Browserify failed to build.",
+      })(e);
+      this.emit("end");
+   };
+
    return browserifyBundler
       .bundle()
+      .on("error", handleError)
       .pipe(source("main.build.js"))
       .pipe(buffer())
       .pipe(gulp.dest("./demo/"))
