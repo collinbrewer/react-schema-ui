@@ -46,6 +46,12 @@ var defaultDisplayValueTransformer=function(property, value, transformer){
       }
    }
 
+   // make sure the display value is renderable
+   if(displayValue && typeof(displayValue)==="object")
+   {
+      displayValue=displayValue.toString();
+   }
+
    return transformer(property, value, displayValue);
 };
 
@@ -59,7 +65,7 @@ var SchemaPropertyValueView=React.createClass({
          "placeholder" : "",
          "editMode" : "form",
          "editable" : false,
-         "displayValueTransformer" : function(p, v, d){ console.log("SchemaPropertyValueView.displayValueTransformer: ", arguments); return d; },
+         "displayValueTransformer" : function(p, v, d){ return d; },
          "onWantsConfirmInlineEdit" : function(){},
          "onWantsCancelInlineEdit" : function(){},
          "onChange" : function(){}
