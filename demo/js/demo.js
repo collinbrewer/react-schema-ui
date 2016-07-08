@@ -1,82 +1,59 @@
 var React=require("react");
-var ObjectGraphSchema=require("object-graph-schema");
-var ReactSchemaUI=require("../../index.js");
-var SchemaEntityView=ReactSchemaUI.SchemaEntityView;
+var SchemaEntityView=require("../../index.js").SchemaEntityView;
 
 var Demo=React.createClass({
 
    render: function(){
 
-      var objectGraphSchema=new ObjectGraphSchema({
-         entities: [
+      var schema={
+         schemaType: "object",
+         properties: [
             {
-               "name":"Todo",
-               "properties":[
-                  {
-                     "name":"title",
-                     "type":"string"
-                  },
-
-                  {
-                     "name" : "description",
-                     "type" : "string",
-                     "meta" : {
-                        "placeholder" : "A short description",
-                        "displayType" : "textarea"
-                     }
-                  },
-
-                  {
-                     "name":"dateCreated",
-                     "type":"date",
-                     "meta" : {
-                        "displayName" : "Created On"
-                     }
-                  },
-
-                  {
-                     "name":"creator",
-                     "type":"relationship",
-                     "entityName" : "User",
-                  },
-
-                  {
-                     "name":"completed",
-                     "type":"boolean"
-                  }
-               ]
+               "schemaType" : "property",
+               "name":"firstName",
+               "type":"string"
             },
 
             {
-               "name" : "User",
-               "properties" : [
-                  {
-                     "name" : "name",
-                     "type" : "string"
-                  }
-               ],
+               "schemaType" : "property",
+               "name":"lastName",
+               "type":"string"
+            },
+
+            {
+               "schemaType" : "property",
+               "name": "age",
+               "type" : "number"
+            },
+
+            {
+               "schemaType" : "property",
+               "name":"dateCreated",
+               "type":"date",
                "meta" : {
-                  displayValuePointer: "name"
+                  "displayName" : "Created On"
                }
+            },
+
+            {
+               "schemaType" : "property",
+               "name":"completed",
+               "type":"boolean"
             }
          ]
-      });
+      };
 
-      var todo=this.todo;
+      var object=this.object;
 
-      if(!todo)
+      if(!object)
       {
-         todo={
-            title: "Use RSUI!",
-            creator : {
-               name: "Chris Ericson"
-            }
+         object={
+            firstName: "Chris",
+            lastName: "Ericson"
          };
 
-         this.todo=todo;
+         this.object=object;
       }
-
-      var todoEntitySchema=objectGraphSchema.getEntitiesByName()["Todo"];
 
       var dateTransformer=function(p, v, d){
 
@@ -95,42 +72,101 @@ var Demo=React.createClass({
       };
 
       return (
-         <div className="container">
+         <div className="container" style={{paddingTop:"64px"}}>
             <div className="row">
-               <div className="col-xs-12">
-                  <h1>Readonly</h1>
-                  <SchemaEntityView
-                     key={1}
-                     entity={todoEntitySchema}
-                     displayValueTransformer={dateTransformer}
-                     object={todo} />
+               <div className="col-xs-12 text-center">
+                  <h1>React Schema UI</h1>
+               </div>
+            </div>
+            <div className="row" style={{paddingTop:"64px"}}>
+               <div className="col-xs-12 col-sm-4">
+                  <div className="panel panel-default">
+                     <div className="panel-heading">
+                        <h2 className="panel-title">Readonly Viewer</h2>
+                     </div>
+                     <div className="panel-body">
+                        <SchemaEntityView
+                           key={1}
+                           schema={schema}
+                           displayValueTransformer={dateTransformer}
+                           value={object} />
+                     </div>
+                  </div>
+               </div>
+               <div className="col-xs-12 col-sm-4">
+                  <div className="panel panel-default">
+                     <div className="panel-heading">
+                        <h2 className="panel-title">Form Editor</h2>
+                     </div>
+                     <div className="panel-body">
+                        <SchemaEntityView
+                           key={2}
+                           schema={schema}
+                           value={object}
+                           editMode="form"
+                           editable={true}
+                           displayValueTransformer={dateTransformer}
+                           onChangeProperty={this.handleChangeProperty} />
+                     </div>
+                  </div>
+               </div>
+               <div className="col-xs-12 col-sm-4">
+                  <div className="panel panel-default">
+                     <div className="panel-heading">
+                        <h2 className="panel-title">Inline Editor</h2>
+                     </div>
+                     <div className="panel-body">
+                        <SchemaEntityView
+                           key={3}
+                           schema={schema}
+                           value={object}
+                           editMode="inline"
+                           editable={true}
+                           displayValueTransformer={dateTransformer}
+                           onChangeProperty={this.handleChangeProperty}
+                           onWantsEditProperty={this.handleWantsEditProperty} />
+                     </div>
+                  </div>
                </div>
             </div>
             <div className="row">
-               <div className="col-xs-12">
-                  <h1>Form Editing</h1>
-                  <SchemaEntityView
-                     key={2}
-                     entity={todoEntitySchema}
-                     object={todo}
-                     editMode="form"
-                     editing={true}
-                     displayValueTransformer={dateTransformer}
-                     onChangeProperty={this.handleChangeProperty} />
+               <div className="col-xs-12 col-sm-4">
+                  <div className="panel panel-default">
+                     <div className="panel-heading">
+                        <h2 className="panel-title">Floating Labels Editor</h2>
+                        <span className="text-muted">Using Custom CSS</span>
+                     </div>
+                     <div className="panel-body">
+                        <SchemaEntityView
+                           className="floating-label"
+                           key={3}
+                           schema={schema}
+                           value={object}
+                           editMode="inline"
+                           inlineCancelComponent={<i className="icon ion-ios-close-outline" />}
+                           inlineConfirmComponent={<i className="icon ion-ios-checkmark-outline" />}
+                           editable={true}
+                           displayValueTransformer={dateTransformer}
+                           onChangeProperty={this.handleChangeProperty}
+                           onWantsEditProperty={this.handleWantsEditProperty} />
+                     </div>
+                  </div>
                </div>
-            </div>
-            <div className="row">
-               <div className="col-xs-12">
-                  <h1>Inline Editing</h1>
-                  <SchemaEntityView
-                     key={3}
-                     entity={todoEntitySchema}
-                     object={todo}
-                     editMode="inline"
-                     editable={true}
-                     displayValueTransformer={dateTransformer}
-                     onChangeProperty={this.handleChangeProperty}
-                     onWantsEditProperty={this.handleWantsEditProperty} />
+               <div className="col-xs-12 col-sm-4">
+                  <div className="panel panel-default">
+                     <div className="panel-heading">
+                        <h2 className="panel-title">Styled Viewer</h2>
+                        <span className="text-muted">Using Custom CSS</span>
+                     </div>
+                     <div className="panel-body">
+                        <SchemaEntityView
+                           className="styled-viewer"
+                           key={3}
+                           schema={schema}
+                           value={object}
+                           displayValueTransformer={dateTransformer} />
+                     </div>
+                  </div>
                </div>
             </div>
          </div>
@@ -147,7 +183,7 @@ var Demo=React.createClass({
 
          if(d)
          {
-            this.todo["dateCreated"]=new Date(d.substr(0, 4), (+d.substr(5, 2))-1, d.substr(8, 2));
+            this.object["dateCreated"]=new Date(d.substr(0, 4), (+d.substr(5, 2))-1, d.substr(8, 2));
 
             this.forceUpdate();
          }
@@ -158,7 +194,7 @@ var Demo=React.createClass({
 
    handleChangeProperty: function(property, value){
 
-      this.todo[property.getName()]=value;
+      this.object[property.getName()]=value;
 
       this.forceUpdate();
    }

@@ -4,14 +4,15 @@
 
 var React=require("react");
 var SchemaPropertyView=require("./schema-property-view.js");
+var RSUISchema=require("./schemas/rsui-schema.js");
 
 var SchemaEntityView=React.createClass({
 
    getDefaultProps: function(){
 
       return {
-         entity: undefined,
-         object: undefined,
+         schema: undefined,
+         value: undefined,
          editMode: "form",
          editing: false,
          editable: false,
@@ -23,16 +24,18 @@ var SchemaEntityView=React.createClass({
    render: function(){
 
       var props=this.props;
-      var entity=props.entity;
+      var schema=props.schema;
       var editMode=props.editMode;
       var editable=props.editable;
       var editing=props.editing;
       var handleWantsEditProperty=props.onWantsEditProperty;
-      var object=props.object;
+      var value=props.value;
       var propertyNameWhitelist=props.propertyNameWhitelist;
       var propertyNameBlacklist=(props.propertyNameBlacklist || []);
       var properties;
       var value;
+
+      schema.getProperties || (schema=new RSUISchema(schema));
 
       // pull in explicity whitelisted or all
       if(propertyNameWhitelist)
@@ -41,7 +44,7 @@ var SchemaEntityView=React.createClass({
 
          propertyNameWhitelist.map(function(propertyName){
 
-            var property=entity.getPropertyWithName(propertyName);
+            var propertySchema=schema.getPropertyWithName(propertyName);
 
             if(property)
             {
@@ -51,7 +54,7 @@ var SchemaEntityView=React.createClass({
       }
       else
       {
-         properties=entity.getProperties();
+         properties=schema.getProperties();
       }
 
       // filter out the blacklist
@@ -65,28 +68,31 @@ var SchemaEntityView=React.createClass({
       // render the property views
       var handleChangeProperty=this.props.onChangeProperty;
 
-      var propertyViews=properties.map(function(property, i){
+      var propertyViews=properties.map(function(propertySchema, i){
 
-         var propertyName=property.getName();
+         var propertyName=propertySchema.getName();
 
-         value=object ? object[propertyName] : undefined;
+         propertyValue=value ? value[propertyName] : undefined;
 
          return (
             <SchemaPropertyView
                key={i}
-               property={property}
-               value={value}
+               schema={propertySchema}
+               value={propertyValue}
                editMode={editMode}
                editable={editable}
                editing={editing}
+               inlineCancelComponent={props.inlineCancelComponent}
+               inlineConfirmComponent={props.inlineConfirmComponent}
                displayValueTransformer={props.displayValueTransformer}
                onWantsEdit={handleWantsEditProperty}
                onChange={handleChangeProperty} />
          );
       });
 
-      var className="rsui-entity-container";
-      editing && (className+=" rsui-entity-container-editing");
+      var className="rsui-schema-container";
+      this.props.className && (className+=" " + this.props.className);
+      editing && (className+=" rsui-schema-container-editing");
 
       return (
          <div className={className}>

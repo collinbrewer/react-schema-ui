@@ -1,3 +1,5 @@
+require("./src/css/core.css");
+
 module.exports={
    SchemaAttributeView: require("./src/schema-attribute-view.js"),
    SchemaEntityView: require("./src/schema-entity-view.js"),

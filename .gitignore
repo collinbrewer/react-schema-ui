@@ -1,4 +1,5 @@
 .DS_Store
 node_modules
+npm-debug.log
 demo/node_modules
 demo/main.build.js

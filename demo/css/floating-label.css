@@ -1,0 +1,99 @@
+.floating-label .rsui-property-container
+{
+
+}
+
+.floating-label .rsui-property-value-container
+{
+   min-height: 24px;
+}
+
+.floating-label .rsui-property-value-viewer
+{
+   font-size: 14pt;
+}
+
+/* the label will act as placeholder so no need to show actual placeholder */
+.floating-label .rsui-property-value-placeholder
+{
+   display: none;
+}
+
+.floating-label .rsui-property-value-container
+{
+   /*position: relative;
+   top: -2em;*/
+}
+
+/* the label will act as placeholder so style as such */
+.floating-label .rsui-property-label
+{
+   color: #AAB2BD;
+   margin-bottom: 0;
+   padding: 0;
+   font-size: 14pt;
+}
+
+.floating-label .rsui-editing .rsui-property-value
+{
+   display: none;
+}
+
+/* the input should be "material ui-ish" */
+.floating-label .rsui-property-container input
+{
+   background: transparent;
+   /*width: 4px;*/
+   outline: 0;
+   border: 0;
+   border-bottom: 1px solid #AAB2BD;
+   font-size: 14pt;
+}
+
+/* input is hidden for both form and inline edit modes */
+.floating-label input
+{
+   opacity: 0;
+}
+
+.floating-label .rsui-property-container.rsui-has-value input
+{
+   /*width: 100%;*/
+}
+
+.floating-label .rsui-property-container {
+   margin-bottom: 4px;
+   padding-top: 1.2em;
+   -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* hide the input text when no focus */
+.floating-label .rsui-property-container input:not(:focus) {
+  opacity:0;
+}
+
+/* shift the label down when not editing */
+.floating-label .rsui-property-label
+{
+   position: absolute;
+   /*pointer-events: none;*/
+   transform-origin: left top;
+   /*transform: scale(1) translate3d(0, 1.4em, 0);*/
+   transition: 200ms ease all;
+   /*-moz-transform-origin: left top;
+   -moz-transform: scale(1) translate3d(0, 22px, 0);
+   -moz-transition: 200ms ease all;
+   -webkit-transform-origin: left top;
+   -webkit-transform: scale(1) translate3d(0, 22px, 0);
+   -webkit-transition: 200ms ease all;*/
+}
+
+/* float! shift the label up when have a value */
+.floating-label .rsui-property-container.rsui-has-value .rsui-property-label,
+.floating-label .rsui-property-container.rsui-editing .rsui-property-label {
+  -moz-transform: scale(0.8) translate3d(0, -1.5em, 0);
+  -webkit-transform: scale(0.8) translate3d(0, -1.5em, 0);
+  transform: scale(0.6) translate3d(0, -1.5em, 0);
+}

@@ -1,33 +1,17 @@
-.rsui-property-value-placeholder
+.rsui-property-label
 {
-   color: #aab2bd !important;
+   color: #434A54;
 }
 
-.rsui-entity-container
+.rsui-property-value-placeholder
 {
-   border: 1px solid #e6e9ed;
-   padding: 12px;
-   background-color: #fff;
-   border-radius: 4px;
+   color: #aab2bd;
+   opacity: 1;
 }
 
 .rsui-property-container
 {
-   margin-bottom: 8px;
-   border-bottom: 1px solid #f5f7fa;
-   padding: 0 2px;
-}
-
-.rsui-property-container:last-child
-{
-   margin-bottom: 0;
-   border-bottom: 0;
-}
-
-.rsui-property-label
-{
-   color: #434a54;
-   font-weight: bold;
+   margin-bottom: 12px;
 }
 
 .rsui-property-value-container
@@ -35,41 +19,23 @@
    color: #5d9cec;
 }
 
-/* Editable State */
-.rsui-entity-container-editable
+.rsui-property-container input
 {
-
+   width: 100%;
 }
 
-.rsui-property-container-editable
+/* Inline Editable */
+.inline-style1 .rsui-edit-mode-inline.rsui-editable
 {
    border: 1px dashed #e6e9ed;
-   cursor: pointer;
 }
 
-.rsui-property-container-editable:hover
+.inline-style1 .rsui-edit-mode-inline.rsui-property-container.rsui-editable:hover
 {
    background-color: rgba(79, 193, 233, 0.1);
 }
 
-.rsui-property-value-container-editable
+.rsui-inline-controls-container .icon
 {
-
-}
-
-/* Editing State */
-.rsui-entity-container-editing
-{
-
-}
-
-.rsui-property-container-editing
-{
-   border: 0;
-   cursor: default;
-}
-
-.rsui-property-value-container-editing
-{
-
+   font-size: 20pt;
 }

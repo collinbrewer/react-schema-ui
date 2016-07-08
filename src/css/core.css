@@ -1,0 +1,81 @@
+/* when placeholder values are used, make them a bit muted */
+.rsui-property-value-placeholder
+{
+   opacity: 0.5;
+}
+
+/* don't show the editor until we're ready */
+.rsui-property-value-editor
+{
+   display: none;
+}
+
+/* show editor when we're editable in form mode */
+.rsui-editable .rsui-property-value-editor
+{
+   display: block;
+}
+
+/**
+ * Form Editor
+ */
+
+/* no placeholder needed */
+.rsui-edit-mode-form .rsui-property-value-placeholder
+{
+   display: none;
+}
+
+/* don't show viewer when we're editable in form mode */
+.rsui-edit-mode-form.rsui-editable .rsui-property-value-viewer
+{
+   display: none;
+}
+
+
+/**
+ * Inline Editor
+ */
+
+/* stylize the confirm button */
+.rsui-inline-confirm
+{
+   float:right;
+}
+
+/* don't show viewer when we're editing in inline mode */
+.rsui-edit-mode-inline.rsui-editing .rsui-property-value-viewer
+{
+   display: none;
+}
+
+ /*  Editable State */
+.rsui-edit-mode-inline.rsui-property-container.rsui-editable,
+.rsui-edit-mode-inline.rsui-property-container.rsui-editable .rsui-property-label
+{
+   cursor: pointer;
+}
+
+.rsui-edit-mode-inline.rsui-editable .rsui-property-value-editor
+{
+   position: absolute; /* takes the element out of the layout flow */
+   opacity: 0;
+}
+
+/* Editing State */
+.rsui-edit-mode-inline.rsui-property-container.rsui-editing,
+.rsui-edit-mode-inline.rsui-property-container.rsui-editing .rsui-property-label
+{
+   cursor: default;
+}
+
+.rsui-edit-mode-inline.rsui-editing .rsui-property-value-editor
+{
+   position: static; /* puts the element back into the layout flow */
+   opacity: 1;
+}
+
+.rsui-edit-mode-inline.rsui-editing .rsui-property-value-placeholder
+{
+   display: none;
+}

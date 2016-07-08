@@ -1,0 +1,12 @@
+.styled-viewer .rsui-property-label
+{
+   display: none;
+}
+
+.styled-viewer .firstName,
+.styled-viewer .lastName
+{
+   display: inline-block;
+   font-size: 1.5em;
+   padding-right: .25em;
+}

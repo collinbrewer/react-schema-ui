@@ -8,6 +8,7 @@ var reactify = require("reactify");
 var browserSync = require("browser-sync");
 var notify=require("gulp-notify");
 var reload = browserSync.reload;
+var browserifyCSS = require("browserify-css")
 
 var watch;
 
@@ -46,6 +47,12 @@ function buildJS() {
          debug: true,
          package: {},
          cache: {}
+      })
+      .transform(browserifyCSS, {
+         autoInject: true,
+         // globals: true,
+         minify: false, 
+         verbose: true
       })
       .transform(reactify);
 
