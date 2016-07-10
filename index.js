@@ -5,5 +5,5 @@ module.exports={
    SchemaEntityView: require("./src/schema-entity-view.js"),
    SchemaPropertyView: require("./src/schema-property-view.js"),
    SchemaRelationshipView: require("./src/schema-relationship-view.js"),
-   SchemaPropertyValueView: require("./src/schema-property-value-view.js"),
+   SchemaPropertyValueViewer: require("./src/schema-property-value-viewer.js"),
 };

@@ -5,13 +5,13 @@
 }
 
 /* don't show the editor until we're ready */
-.rsui-property-value-editor
+.rsui-property-value-editor-container
 {
    display: none;
 }
 
 /* show editor when we're editable in form mode */
-.rsui-editable .rsui-property-value-editor
+.rsui-editable .rsui-property-value-editor-container
 {
    display: block;
 }
@@ -37,10 +37,26 @@
  * Inline Editor
  */
 
+/* stylize the controls */
+.rsui-inline-cancel, .rsui-inline-confirm
+{
+   border: 0;
+   background-color: transparent;
+   padding: 5px 0px;
+}
+
 /* stylize the confirm button */
 .rsui-inline-confirm
 {
    float:right;
+   opacity: 0.5;
+   cursor: no-drop;
+}
+
+.rsui-has-changed .rsui-inline-confirm
+{
+   opacity: 1;
+   cursor: pointer;
 }
 
 /* don't show viewer when we're editing in inline mode */
@@ -56,25 +72,32 @@
    cursor: pointer;
 }
 
-.rsui-edit-mode-inline.rsui-editable .rsui-property-value-editor
+/* hide the editor when we're not editing */
+.rsui-edit-mode-inline.rsui-editable .rsui-property-value-editor-container
 {
-   position: absolute; /* takes the element out of the layout flow */
-   opacity: 0;
+   /*position: absolute; /* takes the element out of the layout flow */
+   /*opacity: 0;*/
+   display: none;
 }
 
 /* Editing State */
+
+/* go back to normal cursor when we're editing */
 .rsui-edit-mode-inline.rsui-property-container.rsui-editing,
 .rsui-edit-mode-inline.rsui-property-container.rsui-editing .rsui-property-label
 {
    cursor: default;
 }
 
-.rsui-edit-mode-inline.rsui-editing .rsui-property-value-editor
+/* show the editor when we're editing */
+.rsui-edit-mode-inline.rsui-editing .rsui-property-value-editor-container
 {
-   position: static; /* puts the element back into the layout flow */
-   opacity: 1;
+   /*position: static; /* puts the element back into the layout flow */
+   /*opacity: 1;*/
+   display: block;
 }
 
+/* hide the placeholder when we're editing */
 .rsui-edit-mode-inline.rsui-editing .rsui-property-value-placeholder
 {
    display: none;

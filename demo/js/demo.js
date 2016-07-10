@@ -1,5 +1,6 @@
 var React=require("react");
 var SchemaEntityView=require("../../index.js").SchemaEntityView;
+var DateValueEditor=require("./date-value-editor.js");
 
 var Demo=React.createClass({
 
@@ -66,6 +67,10 @@ var Demo=React.createClass({
                d=["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][v.getMonth()] + " " +
                  v.getDate() + ", " + v.getFullYear();
             }
+         }
+         else if(p.getType()==="boolean")
+         {
+            d=v ? "Yes" : "No";
          }
 
          return d;
@@ -168,6 +173,27 @@ var Demo=React.createClass({
                      </div>
                   </div>
                </div>
+               <div className="col-xs-12 col-sm-4">
+                  <div className="panel panel-default">
+                     <div className="panel-heading">
+                        <h2 className="panel-title">Custom Inline Editors</h2>
+                     </div>
+                     <div className="panel-body">
+                        <SchemaEntityView
+                           key={3}
+                           schema={schema}
+                           value={object}
+                           editMode="inline"
+                           editable={true}
+                           editors={{
+                              "date" : DateValueEditor
+                           }}
+                           displayValueTransformer={dateTransformer}
+                           onChangeProperty={this.handleChangeProperty}
+                           onWantsEditProperty={this.handleWantsEditProperty} />
+                     </div>
+                  </div>
+               </div>
             </div>
          </div>
       );
@@ -177,13 +203,13 @@ var Demo=React.createClass({
 
       var propertyName=property.getName();
 
-      if(propertyName==="dateCreated")
+      if(propertyName==="completed")
       {
-         var d=prompt("Intercepted request to edit property!! \n\nPlease type a date in format YYYY-MM-DD:");
+         var d=prompt("Intercepted request to edit property!! \n\nPlease type yes or no:");
 
          if(d)
          {
-            this.object["dateCreated"]=new Date(d.substr(0, 4), (+d.substr(5, 2))-1, d.substr(8, 2));
+            this.object["completed"]=(d.toLowerCase()==="yes");
 
             this.forceUpdate();
          }

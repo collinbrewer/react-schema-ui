@@ -3,6 +3,7 @@
  */
 
 var React=require("react");
+var classnames=require("classnames");
 var SchemaPropertyView=require("./schema-property-view.js");
 var RSUISchema=require("./schemas/rsui-schema.js");
 
@@ -16,6 +17,7 @@ var SchemaEntityView=React.createClass({
          editMode: "form",
          editing: false,
          editable: false,
+         editors: {},
          onWantsEditProperty: function(){},
          onChange: function(){}
       }
@@ -74,6 +76,13 @@ var SchemaEntityView=React.createClass({
 
          propertyValue=value ? value[propertyName] : undefined;
 
+         var fn;
+
+         if(handleChangeProperty)
+         {
+            fn=handleChangeProperty.bind(null, propertySchema);
+         }
+
          return (
             <SchemaPropertyView
                key={i}
@@ -82,17 +91,22 @@ var SchemaEntityView=React.createClass({
                editMode={editMode}
                editable={editable}
                editing={editing}
+               propertyEditorClass={props.editors[propertySchema.getType()]}
                inlineCancelComponent={props.inlineCancelComponent}
                inlineConfirmComponent={props.inlineConfirmComponent}
                displayValueTransformer={props.displayValueTransformer}
                onWantsEdit={handleWantsEditProperty}
-               onChange={handleChangeProperty} />
+               onChange={fn} />
          );
       });
 
-      var className="rsui-schema-container";
-      this.props.className && (className+=" " + this.props.className);
-      editing && (className+=" rsui-schema-container-editing");
+      var className=classnames(
+         {
+            "rsui-schema-container" : true,
+            "rsui-schema-container-editing" : editing
+         },
+         this.props.className
+      );
 
       return (
          <div className={className}>

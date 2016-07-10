@@ -1,7 +1,7 @@
 var React=require("react");
 var JSONPointer=require("json-pointer");
 
-var SchemaPropertyValueView=require("./schema-property-value-view.js");
+var SchemaPropertyValueView=require("./schema-property-value-viewer.js");
 
 var SchemaRelationshipRow=React.createClass({
 

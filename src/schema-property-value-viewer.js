@@ -3,6 +3,42 @@ var ReactDOM=require("react-dom");
 var JSONPointer=require("json-pointer");
 
 /**
+ * Provides a full featured value viewer capable of handling most cases without
+ * the need for a custom viewer.
+ */
+var SchemaPropertyValueViewer=React.createClass({
+
+   getDefaultProps: function(){
+      return {
+         "value" : "",
+         "displayType" : "string",
+         "placeholder" : "",
+         "displayValueTransformer" : function(p, v, d){ return d; }
+      };
+   },
+
+   render: function(){
+
+      var displayValue=defaultDisplayValueTransformer(this.props.schema, this.props.value, this.props.displayValueTransformer);
+      var displayType=this.props.displayType;
+      var className="rsui-property-value-viewer";
+
+
+      if(!displayValue)
+      {
+         className="rsui-property-value-placeholder";
+         displayValue=this.props.placeholder;
+      }
+
+      return (
+         <div className={className}>
+            {displayValue}
+         </div>
+      );
+   }
+});
+
+/**
  * defaultDisplayValueTransformer
  */
 var defaultDisplayValueTransformer=function(property, value, transformer){
@@ -44,6 +80,10 @@ var defaultDisplayValueTransformer=function(property, value, transformer){
 
          break;
       }
+      case "date" : {
+         displayValue=value.toLocaleString();
+         break;
+      }
    }
 
    // make sure the display value is renderable
@@ -54,43 +94,5 @@ var defaultDisplayValueTransformer=function(property, value, transformer){
 
    return transformer(property, value, displayValue);
 };
-
-var SchemaPropertyValueViewer=React.createClass({
-
-   getDefaultProps: function(){
-      return {
-         "value" : "",
-         "displayType" : "string",
-         "placeholder" : "",
-         "displayValueTransformer" : function(p, v, d){ return d; }
-      };
-   },
-
-   render: function(){
-
-      var value=this.props.value;
-      var displayValue=defaultDisplayValueTransformer(this.props.schema, value, this.props.displayValueTransformer);
-      var displayType=this.props.displayType;
-      var placeholder=this.props.placeholder;
-
-      var className="rsui-property-value-viewer";
-
-      // if no value, use the placeholder
-      if(!displayValue)
-      {
-         displayValue=(
-            <div className="rsui-property-value-placeholder">
-               {placeholder}
-            </div>
-         );
-      }
-
-      return (
-         <div className={className}>
-            {displayValue}
-         </div>
-      );
-   }
-});
 
 module.exports=SchemaPropertyValueViewer;
