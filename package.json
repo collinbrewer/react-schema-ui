@@ -8,9 +8,7 @@
   },
   "config": {
     "pre-git": {
-      "post-checkout": "npm install",
-      "pre-commit": "gulp dist",
-      "post-commit": "git status"
+      "post-checkout": "npm install"
     }
   },
   "repository": {
