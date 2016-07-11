@@ -18,7 +18,7 @@
     "url": "git+https://collinbrewer@bitbucket.org/collinbrewer/react-schema-ui.git"
   },
   "author": "Collin Brewer <collin@brewer-collective.com>",
-  "license": "UNLICENSED",
+  "license": "ISC",
   "homepage": "https://bitbucket.org/collinbrewer/react-schema-ui#readme",
   "dependencies": {
     "classnames": "^2.2.5",
