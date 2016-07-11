@@ -1,5 +1,5 @@
 var React=require("react");
-var SchemaEntityView=require("../../dist/index.js").SchemaEntityView;
+var SchemaEntityView=require("../../index.js").SchemaEntityView;
 var DateValueEditor=require("./date-value-editor.js");
 
 var Demo=React.createClass({

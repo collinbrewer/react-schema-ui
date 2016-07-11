@@ -4,7 +4,7 @@
   "description": "Build Schema-driven UIs in seconds",
   "main": "index.js",
   "scripts": {
-    "prepublish": "gulp dist"
+    
   },
   "config": {
     "pre-git": {
