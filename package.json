@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://collinbrewer@bitbucket.org/collinbrewer/react-schema-ui.git"
+    "url": "https://github.com/collinbrewer/react-schema-ui.git"
   },
   "author": "Collin Brewer <collin@brewer-collective.com>",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/collinbrewer/react-schema-ui#readme",
+  "homepage": "https://github.com/collinbrewer/react-schema-ui",
   "dependencies": {
     "classnames": "^2.2.5",
     "flux": "^2.1.1",
-    "json-pointer": "git+https://collinbrewer@bitbucket.org/collinbrewer/json-pointer.git",
+    "json-pointer": "github:collinbrewer/json-pointer",
     "react": "^15.2.0",
     "react-dom": "^0.14.8",
     "schema": "git+https://collinbrewer@bitbucket.org/collinbrewer/schema.git"
