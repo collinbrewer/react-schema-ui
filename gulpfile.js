@@ -13,18 +13,18 @@ var browserifyCSS = require("browserify-css")
 var watch;
 
 // test the project
-gulp.task("test", shell.task([
+gulp.task("s", shell.task([
    "mocha test"
 ]));
 
 // build the project
-gulp.task("build", function() {
-   watch = false;
-   return buildJS();
+gulp.task("start", function() {
+   watch = true;
+   gulp.start("build", "watch");
 });
 
 // explicitly watch the static assets and use watchify to watch the js
-gulp.task("watch", ["build"], function() {
+gulp.task("watch", function() {
    // gulp.watch("./demo/**", ["build"]);
 
    watch = true;
@@ -35,7 +35,8 @@ gulp.task("watch", ["build"], function() {
 gulp.task("serve", ["watch"], function() {
    browserSync({
       server: {
-         baseDir: "./demo"
+         baseDir: "./",
+         index: "demo/index.html"
       }
    });
 });
@@ -83,29 +84,3 @@ function buildDemoWithBrowserifyBundler(browserifyBundler) {
 var handleError=function(e){
    this.emit("end");
 };
-
-gulp.task("clean-dist", shell.task([
-   "rm -rf dist"
-]));
-
-gulp.task("dist", ["clean-dist"], function(){
-
-   process.env.NODE_ENV="production";
-
-   var browserifyBundler = browserify({
-      entries: ["./index.js"],
-      debug: true,
-      package: {},
-      cache: {},
-      fullPaths: true
-   })
-   .transform(browserifyCSS, {
-      autoInject: true,
-      minify: true
-   })
-   .transform(reactify)
-   .bundle()
-   .on("error", handleError)
-   .pipe(source("index.js"))
-   .pipe(gulp.dest("./dist"));
-});

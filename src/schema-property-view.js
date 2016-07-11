@@ -278,8 +278,6 @@ var SchemaPropertyView=React.createClass({
 
    endEditSession: function(){
 
-      console.log("ending editing session: ", this.props.schema.getName());
-
       // if we're inline editing and nothing has changed, just cancel the edit
       if(this.props.editMode==="inline" && this.state.editing)
       {

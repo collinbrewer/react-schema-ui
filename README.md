@@ -2,8 +2,20 @@ What is React Schema UI?
 ========================
 **Build schema-driven UIs, *in seconds*.**
 
-Simplest Usage
------------
+Usage
+-------
+
+**Install the package**
+```sh
+npm install react-schema-ui -S
+```
+
+**Import sensible CSS default**
+```css
+@import url("./src/css/core.css");
+```
+
+**Provide a schema**
 
 ```javascript
 // The schema describes the value that should be displayed
@@ -17,7 +29,10 @@ var schemaDefinition={
       }
    ]
 };
+```
 
+**Generate a UI!**
+```js
 let TodoView=React.createClass({
    render() {
       return (

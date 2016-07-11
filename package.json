@@ -2,7 +2,7 @@
   "name": "react-schema-ui",
   "version": "0.3.1",
   "description": "Build Schema-driven UIs in seconds",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "prepublish": "gulp dist"
   },
