@@ -80,13 +80,7 @@ function buildDemoWithBrowserifyBundler(browserifyBundler) {
       .pipe(reload({stream:true}));
 }
 
-gulp.task("default", ["build"]);
-
 var handleError=function(e){
-   notify.onError({
-      title: "Build Error",
-      subtitle: "Browserify failed to build.",
-   })(e);
    this.emit("end");
 };
 
@@ -100,9 +94,10 @@ gulp.task("dist", ["clean-dist"], function(){
 
    var browserifyBundler = browserify({
       entries: ["./index.js"],
-      debug: false,
+      debug: true,
       package: {},
-      cache: {}
+      cache: {},
+      fullPaths: true
    })
    .transform(browserifyCSS, {
       autoInject: true,
