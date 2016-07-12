@@ -39,6 +39,8 @@ var SchemaEntityView=React.createClass({
 
       schema.getProperties || (schema=new RSUISchema(schema));
 
+      console.log("schema: ", schema);
+
       // pull in explicity whitelisted or all
       if(propertyNameWhitelist)
       {
