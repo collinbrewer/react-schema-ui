@@ -8,11 +8,20 @@ var stagedEditors=[];
 function updateEditSessions() {
    stagedEditors=stagedEditors.filter(function(editor){
 
-      if(!editor.hasFocus()) {
-         editor.endEditSession();
+      var keep=true;
+
+      if(editor.isMounted()) {
+         if(!editor.hasFocus()) {
+            editor.endEditSession();
+         }
+
+         keep=editor.isEditing();
+      }
+      else {
+         keep=false;
       }
 
-      return editor.isEditing();
+      return keep;
    });
 }
 
