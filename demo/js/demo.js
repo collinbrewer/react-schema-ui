@@ -56,7 +56,7 @@ var Demo=React.createClass({
          this.object=object;
       }
 
-      var dateTransformer=function(p, v, d){
+      var customTransformer=function(p, v, d){
 
          if(p.getType()==="attribute" && p.getAttributeType()==="date")
          {
@@ -93,7 +93,7 @@ var Demo=React.createClass({
                         <SchemaEntityView
                            key={1}
                            schema={schema}
-                           displayValueTransformer={dateTransformer}
+                           displayValueTransformer={customTransformer}
                            value={object} />
                      </div>
                   </div>
@@ -110,7 +110,7 @@ var Demo=React.createClass({
                            value={object}
                            editMode="form"
                            editable={true}
-                           displayValueTransformer={dateTransformer}
+                           displayValueTransformer={customTransformer}
                            onChangeProperty={this.handleChangeProperty} />
                      </div>
                   </div>
@@ -127,7 +127,7 @@ var Demo=React.createClass({
                            value={object}
                            editMode="inline"
                            editable={true}
-                           displayValueTransformer={dateTransformer}
+                           displayValueTransformer={customTransformer}
                            onChangeProperty={this.handleChangeProperty}
                            onWantsEditProperty={this.handleWantsEditProperty} />
                      </div>
@@ -151,7 +151,7 @@ var Demo=React.createClass({
                            inlineCancelComponent={<i className="icon ion-ios-close-outline" />}
                            inlineConfirmComponent={<i className="icon ion-ios-checkmark-outline" />}
                            editable={true}
-                           displayValueTransformer={dateTransformer}
+                           displayValueTransformer={customTransformer}
                            onChangeProperty={this.handleChangeProperty}
                            onWantsEditProperty={this.handleWantsEditProperty} />
                      </div>
@@ -169,7 +169,7 @@ var Demo=React.createClass({
                            key={3}
                            schema={schema}
                            value={object}
-                           displayValueTransformer={dateTransformer} />
+                           displayValueTransformer={customTransformer} />
                      </div>
                   </div>
                </div>
@@ -188,7 +188,7 @@ var Demo=React.createClass({
                            editors={{
                               "date" : DateValueEditor
                            }}
-                           displayValueTransformer={dateTransformer}
+                           displayValueTransformer={customTransformer}
                            onChangeProperty={this.handleChangeProperty}
                            onWantsEditProperty={this.handleWantsEditProperty} />
                      </div>

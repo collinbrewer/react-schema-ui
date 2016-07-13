@@ -89,6 +89,7 @@ var SchemaPropertyView=React.createClass({
       // we'll make this tabbable if it's inline mode, editable, but not editing
       var tabIndex=((editMode==="inline" && editable && !editing) ? "0" : undefined);
       var focusInput;
+      var viewerContainer;
       var editorContainer;
 
       if(editMode==="inline" && editable && !editing)
@@ -105,6 +106,18 @@ var SchemaPropertyView=React.createClass({
             </div>
          );
       }
+      else
+      {
+         viewerContainer=(
+            <div className="rsui-property-value-viewer-container" key="viewer">
+               <SchemaPropertyValueViewer
+                  value={value}
+                  placeholder={placeholder}
+                  schema={schema}
+                  displayValueTransformer={this.props.displayValueTransformer} />
+            </div>
+         );
+      }
 
       return (
          <div
@@ -115,11 +128,7 @@ var SchemaPropertyView=React.createClass({
             <label className="rsui-property-label" htmlFor={schema.getName()}>{displayName}</label>
             {focusInput}
             <div className="rsui-property-value-container">
-               <SchemaPropertyValueViewer
-                  value={value}
-                  placeholder={placeholder}
-                  schema={schema}
-                  displayValueTransformer={this.props.displayValueTransformer} />
+               {viewerContainer}
                {editorContainer}
             </div>
          </div>
