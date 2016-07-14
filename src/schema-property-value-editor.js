@@ -59,7 +59,7 @@ var SchemaPropertyValueEditor=React.createClass({
             propertyValueEditor=(
                <input
                   type="checkbox"
-                  onChange={this.handleChange}
+                  onChange={this.handleCheckboxChange}
                   />
             );
          }

@@ -1,6 +1,15 @@
 var React=require("react");
-var SchemaEntityView=require("../../index.js").SchemaEntityView;
+var SchemaObjectView=require("../../index.js").SchemaObjectView;
 var DateValueEditor=require("./date-value-editor.js");
+
+function customPropertyViewer(props) {
+
+   if(props.schema.getName()==='age') {
+      return (<div style={{color:'#ED5565'}}>{props.value}!</div>);
+   }
+
+   return null;
+}
 
 var Demo=React.createClass({
 
@@ -50,7 +59,8 @@ var Demo=React.createClass({
       {
          object={
             firstName: "Chris",
-            lastName: "Ericson"
+            lastName: "Ericson",
+            age: 21
          };
 
          this.object=object;
@@ -90,7 +100,7 @@ var Demo=React.createClass({
                         <h2 className="panel-title">Readonly Viewer</h2>
                      </div>
                      <div className="panel-body">
-                        <SchemaEntityView
+                        <SchemaObjectView
                            key={1}
                            schema={schema}
                            displayValueTransformer={customTransformer}
@@ -104,12 +114,15 @@ var Demo=React.createClass({
                         <h2 className="panel-title">Form Editor</h2>
                      </div>
                      <div className="panel-body">
-                        <SchemaEntityView
+                        <SchemaObjectView
                            key={2}
                            schema={schema}
                            value={object}
                            editMode="form"
                            editable={true}
+                           propertyEditors={{
+                              "dateCreated" : DateValueEditor
+                           }}
                            displayValueTransformer={customTransformer}
                            onChangeProperty={this.handleChangeProperty} />
                      </div>
@@ -121,7 +134,7 @@ var Demo=React.createClass({
                         <h2 className="panel-title">Inline Editor</h2>
                      </div>
                      <div className="panel-body">
-                        <SchemaEntityView
+                        <SchemaObjectView
                            key={3}
                            schema={schema}
                            value={object}
@@ -142,7 +155,7 @@ var Demo=React.createClass({
                         <span className="text-muted">Using Custom CSS</span>
                      </div>
                      <div className="panel-body">
-                        <SchemaEntityView
+                        <SchemaObjectView
                            className="floating-label"
                            key={3}
                            schema={schema}
@@ -164,12 +177,13 @@ var Demo=React.createClass({
                         <span className="text-muted">Using Custom CSS</span>
                      </div>
                      <div className="panel-body">
-                        <SchemaEntityView
+                        <SchemaObjectView
                            className="styled-viewer"
                            key={3}
                            schema={schema}
                            value={object}
-                           displayValueTransformer={customTransformer} />
+                           displayValueTransformer={customTransformer}
+                           renderPropertyViewer={customPropertyViewer} />
                      </div>
                   </div>
                </div>
@@ -179,14 +193,14 @@ var Demo=React.createClass({
                         <h2 className="panel-title">Custom Inline Editors</h2>
                      </div>
                      <div className="panel-body">
-                        <SchemaEntityView
+                        <SchemaObjectView
                            key={3}
                            schema={schema}
                            value={object}
                            editMode="inline"
                            editable={true}
-                           editors={{
-                              "date" : DateValueEditor
+                           propertyEditors={{
+                              "dateCreated" : DateValueEditor
                            }}
                            displayValueTransformer={customTransformer}
                            onChangeProperty={this.handleChangeProperty}

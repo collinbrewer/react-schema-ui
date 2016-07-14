@@ -13,12 +13,9 @@ var getDisplayTypeForProperty=function(property){
 
    var displayType="string";
 
-   if(property.getType()==="attribute")
+   if(property.getType()==="boolean")
    {
-      if(property.getAttributeType()==="boolean")
-      {
-         displayType="checkbox";
-      }
+      displayType="checkbox";
    }
 
    return displayType;
@@ -27,6 +24,8 @@ var getDisplayTypeForProperty=function(property){
 var SchemaPropertyView=React.createClass({
 
    getDefaultProps: function(){
+
+      var noop=function(){};
 
       return {
          "schema" : {},
@@ -38,8 +37,10 @@ var SchemaPropertyView=React.createClass({
          "editable" : false,
          "editing" : false,
          "inlineBlurMode" : "submit", // "submit", "cancel", ""
-         "onWantsEdit" : function(){},
-         "onChange" : function(){}
+         "onWantsEdit" : noop,
+         "onChange" : noop,
+         renderPropertyViewer: noop,
+         renderPropertyEditor: noop
       };
    },
 
@@ -110,11 +111,7 @@ var SchemaPropertyView=React.createClass({
       {
          viewerContainer=(
             <div className="rsui-property-value-viewer-container" key="viewer">
-               <SchemaPropertyValueViewer
-                  value={value}
-                  placeholder={placeholder}
-                  schema={schema}
-                  displayValueTransformer={this.props.displayValueTransformer} />
+               {this.renderValueViewer()}
             </div>
          );
       }
@@ -135,6 +132,23 @@ var SchemaPropertyView=React.createClass({
       );
    },
 
+   renderValueViewer: function(){
+      var props=this.props;
+      var viewerProps={
+         value: this.getValue(),
+         placeholder: props.placeholder,
+         schema: props.schema,
+         displayValueTransformer: this.props.displayValueTransformer
+      };
+      var valueViewer=props.renderPropertyViewer(viewerProps);
+
+      if(!valueViewer) {
+         valueViewer=React.createElement((props.propertyViewerClass || SchemaPropertyValueViewer), viewerProps);
+      }
+
+      return valueViewer;
+   },
+
    renderValueEditor: function(){
 
       var props=this.props;
@@ -151,8 +165,13 @@ var SchemaPropertyView=React.createClass({
          onChange: this.handleChange,
          autoFocus: this.state.editing
       };
+      var valueEditor=props.renderPropertyEditor(editorProps);
 
-      return React.createElement((props.propertyEditorClass || SchemaPropertyValueEditor), editorProps);
+      if(!valueEditor) {
+         valueEditor=React.createElement((props.propertyEditorClass || SchemaPropertyValueEditor), editorProps)
+      }
+
+      return valueEditor;
    },
 
    renderInlineEditingControls: function(){

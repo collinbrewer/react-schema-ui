@@ -7,7 +7,7 @@ var classnames=require("classnames");
 var SchemaPropertyView=require("./schema-property-view.js");
 var RSUISchema=require("./schemas/rsui-schema.js");
 
-var SchemaEntityView=React.createClass({
+var SchemaObjectView=React.createClass({
 
    getDefaultProps: function(){
 
@@ -17,7 +17,8 @@ var SchemaEntityView=React.createClass({
          editMode: "form",
          editing: false,
          editable: false,
-         editors: {},
+         propertyViewers: {},
+         propertyEditors: {},
          onWantsEditProperty: function(){},
          onChange: function(){}
       }
@@ -91,7 +92,10 @@ var SchemaEntityView=React.createClass({
                editMode={editMode}
                editable={editable}
                editing={editing}
-               propertyEditorClass={props.editors[propertySchema.getType()]}
+               propertyViewerClass={props.propertyViewers[propertySchema.getName()]}
+               propertyEditorClass={props.propertyEditors[propertySchema.getName()]}
+               renderPropertyViewer={props.renderPropertyViewer}
+               renderPropertyEditor={props.renderPropertyEditor}
                inlineCancelComponent={props.inlineCancelComponent}
                inlineConfirmComponent={props.inlineConfirmComponent}
                displayValueTransformer={props.displayValueTransformer}
@@ -116,4 +120,4 @@ var SchemaEntityView=React.createClass({
    }
 });
 
-module.exports=SchemaEntityView;
+module.exports=SchemaObjectView;
