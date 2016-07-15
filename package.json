@@ -22,7 +22,7 @@
     "classnames": "^2.2.5",
     "flux": "^2.1.1",
     "json-pointer": "github:collinbrewer/json-pointer",
-    "schema": "git+https://collinbrewer@bitbucket.org/collinbrewer/schema.git"
+    "schema": "github:collinbrewer/schema"
   },
   "browserify": {
     "transform": [
