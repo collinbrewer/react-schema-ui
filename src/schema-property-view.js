@@ -1,7 +1,9 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
 var classnames=require("classnames");
+var JSONPointer=require("json-pointer");
 
+var PropertySchema=require("./schemas/property-schema.js");
 var SchemaAttributeView=require("./schema-attribute-view.js");
 var SchemaRelationshipView=require("./schema-relationship-view.js");
 var SchemaPropertyValueViewer=require("./schema-property-value-viewer.js");
@@ -40,7 +42,8 @@ var SchemaPropertyView=React.createClass({
          "onWantsEdit" : noop,
          "onChange" : noop,
          renderPropertyViewer: noop,
-         renderPropertyEditor: noop
+         renderPropertyEditor: noop,
+         displayValueTransformer : function(p, v, d){ return d; }
       };
    },
 
@@ -64,9 +67,9 @@ var SchemaPropertyView=React.createClass({
       var editMode=props.editMode;
       var editable=this.props.editable;
       var editing=this.state.editing;
-      var schema=props.schema;
+      var schema=this.getSchema();
       var value=this.state.stagedValue || this.props.value;
-      var displayName=schema.displayName || camelCaseToTitleCase(schema.getName());
+      var displayName=schema.getLabel() || camelCaseToTitleCase(schema.getName());
       var placeholder=schema.getPlaceholder();
       var inlineEditingControls;
       var className=classnames(
@@ -134,16 +137,31 @@ var SchemaPropertyView=React.createClass({
 
    renderValueViewer: function(){
       var props=this.props;
-      var viewerProps={
-         value: this.getValue(),
-         placeholder: props.placeholder,
-         schema: props.schema,
-         displayValueTransformer: this.props.displayValueTransformer
-      };
-      var valueViewer=props.renderPropertyViewer(viewerProps);
+      var schema=this.getSchema();
+      var value=this.getValue();
+      var displayValue=defaultDisplayValueTransformer(schema, value, props.displayValueTransformer);
+      var placeholder=schema.getPlaceholder();
 
-      if(!valueViewer) {
-         valueViewer=React.createElement((props.propertyViewerClass || SchemaPropertyValueViewer), viewerProps);
+      if(displayValue)
+      {
+         var viewerProps={
+            value: this.getValue(),
+            displayValue: displayValue,
+            schema: schema
+         };
+         var valueViewer=props.renderPropertyViewer(viewerProps);
+
+         if(!valueViewer) {
+            valueViewer=React.createElement((props.propertyViewerClass || SchemaPropertyValueViewer), viewerProps);
+         }
+      }
+      else
+      {
+         valueViewer=(
+            <div className='rsui-property-value-placeholder'>
+               {placeholder}
+            </div>
+         );
       }
 
       return valueViewer;
@@ -152,15 +170,16 @@ var SchemaPropertyView=React.createClass({
    renderValueEditor: function(){
 
       var props=this.props;
+      var schema=this.getSchema();
       var editorProps={
-         ref: props.schema.getName(),
+         ref: schema.getName(),
          value: this.getValue(),
-         displayType: getDisplayTypeForProperty(props.schema),
+         displayType: getDisplayTypeForProperty(schema),
          placeholder: props.placeholder,
          editMode: props.editMode,
          editable: props.editable,
          editing: this.state.editing,
-         schema: props.schema,
+         schema: schema,
          displayValueTransformer: this.props.displayValueTransformer,
          onChange: this.handleChange,
          autoFocus: this.state.editing
@@ -218,8 +237,7 @@ var SchemaPropertyView=React.createClass({
 
    handleWantsEdit: function(){
 
-      var schema=this.props.schema;
-      var type=schema.getType();
+      var type=this.getSchema().getType();
 
       var allowedToEdit=this.props.onWantsEdit(schema);
       var shouldInlineEdit=allowedToEdit;
@@ -279,7 +297,7 @@ var SchemaPropertyView=React.createClass({
 
    beginEditSession: function(e){
 
-      var shouldEdit=this.props.onWantsEdit(this.props.schema, e);
+      var shouldEdit=this.props.onWantsEdit(this.getSchema(), e);
 
       if(shouldEdit!==false)
       {
@@ -366,6 +384,11 @@ var SchemaPropertyView=React.createClass({
       });
    },
 
+   getSchema: function(){
+      var schema=this.props.schema;
+      return ('getName' in schema) || (schema=new PropertySchema(schema));
+   },
+
    getValue: function(){
       return (this.state.stagedValue!==undefined ? this.state.stagedValue : this.props.value);
    },
@@ -375,5 +398,62 @@ var SchemaPropertyView=React.createClass({
       return (this.getValue()!==this.props.value);
    }
 });
+
+/**
+ * defaultDisplayValueTransformer
+ */
+var defaultDisplayValueTransformer=function(property, value, transformer){
+
+   var displayValue=value;
+   var type=property.getType();
+
+   switch(type)
+   {
+      case "relationship" : // TODO: what about fetched?
+      {
+         var entityName=property.getEntityName();
+         var destinationEntity=property.getDestinationEntity();
+         var definition=destinationEntity.getDefinition();
+         var meta=definition.meta;
+
+         if(meta && meta.displayValuePointer)
+         {
+            if(property.toMany)
+            {
+               displayValue=value.length + " " + entityName + "(s)";
+            }
+            else
+            {
+               displayValue=JSONPointer.evaluate(meta.displayValuePointer, value, {delimiter:".", strict:false, defaultValue:""});
+            }
+         }
+         else
+         {
+            if(property.toMany)
+            {
+               displayValue=value.length + " " + entityName + "(s)";
+            }
+            else
+            {
+               displayValue=value || "";
+            }
+         }
+
+         break;
+      }
+      case "date" : {
+         displayValue=value && value.toLocaleString();
+         break;
+      }
+   }
+
+   // make sure the display value is renderable
+   if(displayValue && typeof(displayValue)==="object")
+   {
+      displayValue=displayValue.toString();
+   }
+
+   return transformer(property, value, displayValue);
+};
 
 module.exports=SchemaPropertyView;

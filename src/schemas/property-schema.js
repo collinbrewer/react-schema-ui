@@ -6,6 +6,10 @@ PropertySchema.prototype.getName = function() {
    return this.definition.name;
 };
 
+PropertySchema.prototype.getLabel = function () {
+   return this.definition.label;
+};
+
 PropertySchema.prototype.getType = function () {
    return this.definition.type;
 };

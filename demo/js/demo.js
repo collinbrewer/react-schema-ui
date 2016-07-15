@@ -40,6 +40,8 @@ var Demo=React.createClass({
                "schemaType" : "property",
                "name":"dateCreated",
                "type":"date",
+               "label": "Date",
+               "placeholder" : "date record was created", 
                "meta" : {
                   "displayName" : "Created On"
                }
@@ -59,7 +61,6 @@ var Demo=React.createClass({
       {
          object={
             firstName: "Chris",
-            lastName: "Ericson",
             age: 21
          };
 

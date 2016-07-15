@@ -42,11 +42,12 @@ var SchemaPropertyValueEditor=React.createClass({
    render: function(){
 
       var propertyValueEditor=null;
-      var editMode=this.props.editMode;
-      var editable=this.props.editable;
-      var value=this.props.value;
-      var displayType=this.props.displayType;
-      var placeholder=this.props.placeholder;
+      var props=this.props;
+      var editMode=props.editMode;
+      var editable=props.editable;
+      var value=props.value;
+      var displayType=props.displayType;
+      var placeholder=props.placeholder || props.schema.getPlaceholder();
 
       var className="rsui-property-value-editor"
       editable && (className+=" rsui-editable");
@@ -72,7 +73,7 @@ var SchemaPropertyValueEditor=React.createClass({
                   ref="input"
                   className={className}
                   type="text"
-                  placeholder={this.props.placeholder}
+                  placeholder={placeholder}
                   value={value}
                   onChange={this.handleChange}
                   onBlur={this.handleBlur}
