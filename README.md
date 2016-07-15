@@ -1,6 +1,14 @@
 What is React Schema UI?
-========================
-**Build schema-driven UIs, *in seconds*.**
+------------------------
+[![Build Status](https://travis-ci.org/collinbrewer/react-schema-ui.svg?branch=master)](https://travis-ci.org/collinbrewer/react-schema-ui)
+
+Build schema-driven UIs, *in seconds*.
+
+React Schema UI offers:
+- Outputs beautiful, semantic viewers and editors
+- Plain JSON schemas offer portability and flexible output
+- Easy to style with CSS
+- Extensible viewers/editors
 
 Usage
 -------
