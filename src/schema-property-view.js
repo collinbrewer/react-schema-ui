@@ -4,11 +4,8 @@ var classnames=require("classnames");
 var JSONPointer=require("json-pointer");
 
 var PropertySchema=require("./schemas/property-schema.js");
-var SchemaAttributeView=require("./schema-attribute-view.js");
-var SchemaRelationshipView=require("./schema-relationship-view.js");
 var SchemaPropertyValueViewer=require("./schema-property-value-viewer.js");
 var SchemaPropertyValueEditor=require("./schema-property-value-editor.js");
-var camelCaseToTitleCase=require("./util/camel-case-to-title-case.js");
 var dispatcher=require("./dispatcher.js");
 
 var getDisplayTypeForProperty=function(property){
@@ -69,7 +66,7 @@ var SchemaPropertyView=React.createClass({
       var editing=this.state.editing;
       var schema=this.getSchema();
       var value=this.state.stagedValue || this.props.value;
-      var displayName=schema.getLabel() || camelCaseToTitleCase(schema.getName());
+      var displayName=schema.getLabel();
       var placeholder=schema.getPlaceholder();
       var inlineEditingControls;
       var className=classnames(
@@ -386,7 +383,7 @@ var SchemaPropertyView=React.createClass({
 
    getSchema: function(){
       var schema=this.props.schema;
-      return ('getName' in schema) || (schema=new PropertySchema(schema));
+      return (('getName' in schema) ? schema : new PropertySchema(schema));
    },
 
    getValue: function(){

@@ -1,5 +1,4 @@
 var Dispatcher=require("flux").Dispatcher;
-var ReactDOM=require("react-dom");
 var dispatcher=new Dispatcher();
 
 var stagedEditors=[];

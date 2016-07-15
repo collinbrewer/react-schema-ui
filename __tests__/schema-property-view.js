@@ -2,15 +2,14 @@ var React=require("react");
 var ReactDOM=require("react-dom");
 var TestUtils=require("react-addons-test-utils");
 
-
 var SchemaPropertyView=require("../src/schema-property-view.js");
 
-var schema={
+var definition={
    "schemaType" : "property",
    "name":"firstName",
    "type":"string",
-   "label": "Date",
-   "placeholder" : "date record was created",
+   "label": "Label",
+   "placeholder" : "placeholder",
 };
 
 describe("SchemaPropertyView", function(){
@@ -19,19 +18,31 @@ describe("SchemaPropertyView", function(){
 
       var component=TestUtils.renderIntoDocument(
          <SchemaPropertyView
-            schema={schema} />
+            schema={definition} />
       );
 
       var node=ReactDOM.findDOMNode(component);
 
-      expect(node.textContent).toContain("date record was created");
+      expect(node.textContent).toContain("placeholder");
+   });
+
+   it("renders the label", function(){
+
+      var component=TestUtils.renderIntoDocument(
+         <SchemaPropertyView
+            schema={definition} />
+      );
+
+      var node=ReactDOM.findDOMNode(component);
+
+      expect(node.textContent).toContain("Label");
    });
 
    it("renders the viewer", function(){
 
       var component=TestUtils.renderIntoDocument(
          <SchemaPropertyView
-            schema={schema}
+            schema={definition}
             value={'foo'} />
       );
 
@@ -45,7 +56,7 @@ describe("SchemaPropertyView", function(){
       var component=TestUtils.renderIntoDocument(
          <SchemaPropertyView
             editable={true}
-            schema={schema}
+            schema={definition}
             value={'foo'} />
       );
 

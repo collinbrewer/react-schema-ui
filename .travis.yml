@@ -1,3 +1,11 @@
 language: node_js
 node_js:
-  - "6"
+- '6'
+deploy:
+  provider: npm
+  email: collin@brewer-collective.com
+  api_key:
+    secure: Yw4dKl+TKcou3cpXHbmzcz/RWFoGbW79yZ8+MQveJoTS5wYxRv7RAv4IEa57LJvNfrmlsemuuAlHKDaamB/+MY5qACYSfeGfnQ5ojH95iMR/T0eUsdXsx8K3xXcz/ii43QW8prJYuXkd8WBV4hgy9kZxQ7vNX5SZSztEe/YnbfKj18V/B84uoCx9Mnn1E5zDKJo0jK0+uNmsyyVryGEUL9KazPc2oj5OnU0UDsAlmVLtj5pZOaKiFZIqcdMwX65a680geZg3bG8C35gSqXr18d40oriavNMAIepWlY7dMhcSSMy+6g4EGhwxUhY5CZxNxPNkGf4Bjc20YqYgN6SHhZHBiLmCcHniKh36ZhWIo16ykQWGlL5dSLzWq5pWA7kn6jXLrVFUOHyKBl9647EURtRDLUs001j9+XwHt8uWtDtbfQFZrom5DEE+HNotVtAtTMrozdU6r6IQysusWltKkxDOxro9cJ7eW4cs4S/FCcYUkJ2c9EeKtP1sesyxPbg6QrsjIhkabnP1MvXwO/56N3h51qHd8J9XGhdQjsNo0xkT+arx3EonV7RKE+lcbexCM6nHCRLSgf3uSWrG8tVBa5K8LcGHOWpSpkLC48c2+b8upAaB9hqa7E+BT9aOnpe/mdtSeEvmzmDgs7E0EBsjf8he+NbTJIeW5HS+QQ1ueXU=
+  on:
+    tags: true
+    repo: collinbrewer/react-schema-ui

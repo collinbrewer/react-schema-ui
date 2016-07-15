@@ -1,3 +1,5 @@
+var titleCase=require('title-case');
+
 function PropertySchema(definition) {
    this.definition = definition;
 }
@@ -7,7 +9,7 @@ PropertySchema.prototype.getName = function() {
 };
 
 PropertySchema.prototype.getLabel = function () {
-   return this.definition.label;
+   return this.definition.label || titleCase(this.getName());
 };
 
 PropertySchema.prototype.getType = function () {

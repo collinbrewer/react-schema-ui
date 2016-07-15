@@ -75,7 +75,7 @@ var SchemaObjectView=React.createClass({
 
          var propertyName=propertySchema.getName();
 
-         propertyValue=value ? value[propertyName] : undefined;
+         var propertyValue=value ? value[propertyName] : undefined;
 
          var fn;
 
