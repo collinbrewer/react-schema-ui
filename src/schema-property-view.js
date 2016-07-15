@@ -406,48 +406,10 @@ var defaultDisplayValueTransformer=function(property, value, transformer){
 
    switch(type)
    {
-      case "relationship" : // TODO: what about fetched?
-      {
-         var entityName=property.getEntityName();
-         var destinationEntity=property.getDestinationEntity();
-         var definition=destinationEntity.getDefinition();
-         var meta=definition.meta;
-
-         if(meta && meta.displayValuePointer)
-         {
-            if(property.toMany)
-            {
-               displayValue=value.length + " " + entityName + "(s)";
-            }
-            else
-            {
-               displayValue=JSONPointer.evaluate(meta.displayValuePointer, value, {delimiter:".", strict:false, defaultValue:""});
-            }
-         }
-         else
-         {
-            if(property.toMany)
-            {
-               displayValue=value.length + " " + entityName + "(s)";
-            }
-            else
-            {
-               displayValue=value || "";
-            }
-         }
-
-         break;
-      }
       case "date" : {
          displayValue=value && value.toLocaleString();
          break;
       }
-   }
-
-   // make sure the display value is renderable
-   if(displayValue && typeof(displayValue)==="object")
-   {
-      displayValue=displayValue.toString();
    }
 
    return transformer(property, value, displayValue);

@@ -38,7 +38,7 @@ describe("SchemaPropertyView", function(){
       expect(node.textContent).toContain("Label");
    });
 
-   it("renders the viewer", function(){
+   it("renders the string value viewer", function(){
 
       var component=TestUtils.renderIntoDocument(
          <SchemaPropertyView
@@ -49,6 +49,22 @@ describe("SchemaPropertyView", function(){
       var node=ReactDOM.findDOMNode(component);
 
       expect(node.textContent).toContain("foo");
+   });
+
+   it("renders the date value viewer", function(){
+
+      let definition = {type:'date'};
+      let value = new Date();
+
+      var component=TestUtils.renderIntoDocument(
+         <SchemaPropertyView
+            schema={definition}
+            value={value} />
+      );
+
+      var node=ReactDOM.findDOMNode(component);
+
+      expect(node.textContent).toContain(value.toLocaleString());
    });
 
    it("renders the editor", function(){
@@ -64,5 +80,9 @@ describe("SchemaPropertyView", function(){
 
       expect(component).toBeDefined();
       expect(component.value).toEqual('foo');
+   });
+
+   it('cancels edit mode', function(){
+
    });
 })

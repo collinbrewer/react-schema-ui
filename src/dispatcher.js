@@ -1,11 +1,11 @@
 var Dispatcher=require("flux").Dispatcher;
 var dispatcher=new Dispatcher();
 
-var stagedEditors=[];
+dispatcher.stagedEditors=[];
 
 // manage editing session
 function updateEditSessions() {
-   stagedEditors=stagedEditors.filter(function(editor){
+   dispatcher.stagedEditors=dispatcher.stagedEditors.filter(function(editor){
 
       var keep=true;
 
@@ -27,13 +27,12 @@ function updateEditSessions() {
 // poll for changes in focus
 setInterval(updateEditSessions, 250);
 
-
 dispatcher.register(function(payload){
    if(payload.actionType==="beginEditSession") {
 
       updateEditSessions();
 
-      stagedEditors.push(payload.editor);
+      dispatcher.stagedEditors.push(payload.editor);
    }
 });
 
