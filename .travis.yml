@@ -9,3 +9,5 @@ deploy:
   on:
     tags: true
     repo: collinbrewer/react-schema-ui
+# Send coverage data to Coveralls
+after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
