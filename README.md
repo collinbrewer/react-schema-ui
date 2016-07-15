@@ -1,8 +1,9 @@
 What is React Schema UI?
 ------------------------
-[![Build Status](https://travis-ci.org/collinbrewer/react-schema-ui.svg?branch=master)](https://travis-ci.org/collinbrewer/react-schema-ui)
-[![Coverage Status](https://coveralls.io/repos/github/collinbrewer/react-schema-ui/badge.svg?branch=master)](https://coveralls.io/github/collinbrewer/react-schema-ui?branch=master)
-[![Dependency Status](https://david-dm.org/collinbrewer/react-schema-ui.svg)](https://david-dm.org/collinbrewer/react-schema-ui.svg)
+[![npm](https://img.shields.io/npm/v/react-schema-ui.svg?maxAge=2592000)](https://www.npmjs.com/package/react-schema-ui)
+[![Build Status](https://img.shields.io/travis/collinbrewer/react-schema-ui/master.svg)](https://travis-ci.org/collinbrewer/react-schema-ui)
+[![Coverage Status](https://img.shields.io/coveralls/collinbrewer/react-schema-ui/master.svg)](https://coveralls.io/github/collinbrewer/react-schema-ui?branch=master)
+[![Dependency Status](https://img.shields.io/david/collinbrewer/react-schema-ui/master.svg)](https://david-dm.org/collinbrewer/react-schema-ui.svg)
 
 Build schema-driven UIs, *in seconds*.
 
