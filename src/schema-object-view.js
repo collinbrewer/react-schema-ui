@@ -5,7 +5,8 @@
 var React=require("react");
 var classnames=require("classnames");
 var SchemaPropertyView=require("./schema-property-view.js");
-var RSUISchema=require("./schemas/rsui-schema.js");
+
+var ObjectSchema=require("./schemas/object-schema.js");
 
 var SchemaObjectView=React.createClass({
 
@@ -27,7 +28,7 @@ var SchemaObjectView=React.createClass({
    render: function(){
 
       var props=this.props;
-      var schema=props.schema;
+      var schema=this.getSchema();
       var editMode=props.editMode;
       var editable=props.editable;
       var editing=props.editing;
@@ -38,21 +39,11 @@ var SchemaObjectView=React.createClass({
       var properties;
       var value;
 
-      schema.getProperties || (schema=new RSUISchema(schema));
-
       // pull in explicity whitelisted or all
       if(propertyNameWhitelist)
       {
-         properties=[];
-
-         propertyNameWhitelist.map(function(propertyName){
-
-            var propertySchema=schema.getPropertyWithName(propertyName);
-
-            if(property)
-            {
-               properties.push(property);
-            }
+         properties=schema.getProperties().filter(function(property){
+            return (propertyNameWhitelist.indexOf(property.getName())!==-1);
          });
       }
       else
@@ -117,6 +108,11 @@ var SchemaObjectView=React.createClass({
             {propertyViews}
          </div>
       );
+   },
+
+   getSchema: function(){
+      var schema=this.props.schema;
+      return (('getProperties' in schema) ? schema : new ObjectSchema(schema));
    }
 });
 

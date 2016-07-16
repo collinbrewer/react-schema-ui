@@ -232,21 +232,6 @@ var SchemaPropertyView=React.createClass({
       // }
    },
 
-   handleWantsEdit: function(){
-
-      var type=this.getSchema().getType();
-
-      var allowedToEdit=this.props.onWantsEdit(schema);
-      var shouldInlineEdit=allowedToEdit;
-
-      if(type==="relationship" || type==="fetched")
-      {
-         shouldInlineEdit=false;
-      }
-
-      return shouldInlineEdit;
-   },
-
    handleChange: function(value){
 
       // if the edit mode is inline, we'll apply the changes internally
@@ -263,16 +248,6 @@ var SchemaPropertyView=React.createClass({
    },
 
    handleMouseDownContainer: function(e){
-      // if(this.props.editMode==="inline")
-      // {
-      //    if(this.state.editing)
-      //    {
-      //       e.preventDefault();
-      //    }
-      // }
-   },
-
-   handleClickContainer: function(e){
 
       if(this.props.editMode==="inline")
       {
@@ -280,7 +255,14 @@ var SchemaPropertyView=React.createClass({
          {
             e.preventDefault();
          }
-         else if(this.props.editable)
+      }
+   },
+
+   handleClickContainer: function(e){
+
+      if(this.props.editMode==="inline")
+      {
+         if(this.props.editable)
          {
             this.beginEditSession(e);
          }
@@ -288,7 +270,6 @@ var SchemaPropertyView=React.createClass({
    },
 
    handleFocus: function(e){
-
       this.beginEditSession(e);
    },
 
@@ -315,7 +296,7 @@ var SchemaPropertyView=React.createClass({
       {
          this.refs.fakeInput.blur();
          // this.refs.container.blur();
-         e.preventDefault();
+         e && e.preventDefault();
       }
    },
 

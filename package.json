@@ -4,7 +4,7 @@
   "description": "Build Schema-driven UIs in seconds",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "config": {
     "pre-git": {

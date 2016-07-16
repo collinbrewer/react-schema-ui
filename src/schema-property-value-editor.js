@@ -47,13 +47,13 @@ var SchemaPropertyValueEditor=React.createClass({
       var editable=props.editable;
       var value=props.value;
       var displayType=props.displayType;
-      var placeholder=props.placeholder || props.schema.getPlaceholder();
+      var placeholder=props.placeholder;
 
       var className="rsui-property-value-editor"
       editable && (className+=" rsui-editable");
 
       // render the input
-      if(editable)
+      // if(editable)
       {
          if(displayType==="checkbox")
          {
