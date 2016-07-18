@@ -83,6 +83,23 @@ describe("SchemaPropertyView", function(){
       expect(component.value).toEqual('foo');
    });
 
+   it("renders the password editor", function(){
+
+      definition=JSON.parse(JSON.stringify(definition));
+      definition.secure=true;
+
+      var component=TestUtils.renderIntoDocument(
+         <SchemaPropertyView
+            editable={true}
+            schema={definition}
+            value={'foo'} />
+      );
+
+      var component=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+
+      expect(component.type).toEqual('password');
+   });
+
    it("inline mode tracks changes", function(){
 
       var component=TestUtils.renderIntoDocument(

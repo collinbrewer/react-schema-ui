@@ -10,11 +10,15 @@ var dispatcher=require("./dispatcher.js");
 
 var getDisplayTypeForProperty=function(property){
 
-   var displayType="string";
+   var displayType="text";
 
    if(property.getType()==="boolean")
    {
       displayType="checkbox";
+   }
+   else if(property.isSecure())
+   {
+      displayType='password';
    }
 
    return displayType;

@@ -3,7 +3,7 @@
    display: none;
 }
 
-.styled-viewer .firstName,
+.styled-viewer .username,
 .styled-viewer .lastName
 {
    display: inline-block;

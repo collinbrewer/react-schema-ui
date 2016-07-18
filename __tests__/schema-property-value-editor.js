@@ -15,6 +15,16 @@ describe("PropertyValueEditor", function(){
       expect(node.type).toEqual('text');
    });
 
+   it('should render a password input', function(){
+      var component=TestUtils.renderIntoDocument(
+         <SchemaPropertyValueEditor
+            displayType={'password'} />
+      );
+      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+
+      expect(node.type).toEqual('password');
+   });
+
    it('should render a checkbox', function(){
 
       var component=TestUtils.renderIntoDocument(

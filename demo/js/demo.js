@@ -1,5 +1,5 @@
 var React=require("react");
-var SchemaObjectView=require("../../index.js").SchemaObjectView;
+var SchemaObjectView=require("../../src/react-schema-ui.js").SchemaObjectView;
 var DateValueEditor=require("./date-value-editor.js");
 
 function customPropertyViewer(props) {
@@ -20,14 +20,15 @@ var Demo=React.createClass({
          properties: [
             {
                "schemaType" : "property",
-               "name":"firstName",
+               "name":"username",
                "type":"string"
             },
 
             {
                "schemaType" : "property",
-               "name":"lastName",
-               "type":"string"
+               "name":"password",
+               "type":"string",
+               secure: true
             },
 
             {
@@ -41,7 +42,7 @@ var Demo=React.createClass({
                "name":"dateCreated",
                "type":"date",
                "label": "Date",
-               "placeholder" : "date record was created", 
+               "placeholder" : "date record was created",
                "meta" : {
                   "displayName" : "Created On"
                }
@@ -60,7 +61,7 @@ var Demo=React.createClass({
       if(!object)
       {
          object={
-            firstName: "Chris",
+            username: "collinbrewer",
             age: 21
          };
 

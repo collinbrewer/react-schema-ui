@@ -20,7 +20,7 @@ var SchemaPropertyValueEditor=React.createClass({
    getDefaultProps: function(){
       return {
          "value" : "",
-         "displayType" : "string",
+         "displayType" : "text",
          "placeholder" : "",
          "editMode" : "form",
          "editable" : false,
@@ -72,7 +72,7 @@ var SchemaPropertyValueEditor=React.createClass({
                <input
                   ref="input"
                   className={className}
-                  type="text"
+                  type={displayType}
                   placeholder={placeholder}
                   value={value}
                   onChange={this.handleChange}

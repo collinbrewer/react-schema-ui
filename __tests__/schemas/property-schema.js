@@ -37,4 +37,10 @@ describe('PropertySchema', () => {
 
       expect(schema.getLabel()).toEqual('Property Name');
    });
+
+   it('returns true for secure properties', () => {
+      var schema=new PropertySchema({secure:true});
+
+      expect(schema.isSecure()).toBeTruthy();
+   })
 });
