@@ -42,5 +42,17 @@ describe('PropertySchema', () => {
       var schema=new PropertySchema({secure:true});
 
       expect(schema.isSecure()).toBeTruthy();
-   })
+   });
+
+   it('defaults to false for non-required properties', () => {
+      var schema=new PropertySchema({});
+
+      expect(schema.isRequired()).toBeFalsy();
+   });
+
+   it('returns true for required properties', () => {
+      var schema=new PropertySchema({required:true});
+
+      expect(schema.isRequired()).toBeTruthy();
+   });
 });

@@ -311,4 +311,36 @@ describe("SchemaPropertyView", function(){
 
       expect(component.isEditing()).toBeTruthy();
    });
+
+   it('should return valid for existing required', () => {
+
+      definition=JSON.parse(JSON.stringify(definition));
+      definition.required=true;
+
+      var component=TestUtils.renderIntoDocument(
+         <SchemaPropertyView
+            schema={definition}
+            value={'foo'}
+            editMode={'inline'}
+            editable={true} />
+      );
+
+      expect(component.isValid()).toBeTruthy();
+   });
+
+
+   it('should return invalid for missing required', () => {
+
+      definition=JSON.parse(JSON.stringify(definition));
+      definition.required=true;
+
+      var component=TestUtils.renderIntoDocument(
+         <SchemaPropertyView
+            schema={definition}
+            editMode={'inline'}
+            editable={true} />
+      );
+
+      expect(component.isValid()).toBeFalsy();
+   });
 });

@@ -446,6 +446,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	   },
 
+	   getWhiteBlackProperties: function getWhiteBlackProperties() {
+
+	      var whiteBlackProperties = this.whiteBlackProperties;
+
+	      if (!whiteBlackProperties) {
+
+	         var schema = this.getSchema();
+	         var propertyNameWhitelist = this.props.propertyNameWhitelist;
+	         var propertyNameBlacklist = this.props.propertyNameBlacklist || [];
+	         whiteBlackProperties = schema.getProperties();
+
+	         // pull in explicity whitelisted or all
+	         if (propertyNameWhitelist) {
+	            whiteBlackProperties = whiteBlackProperties.filter(function (property) {
+	               return propertyNameWhitelist.indexOf(property.getName()) !== -1;
+	            });
+	         }
+
+	         // filter out the blacklist
+	         if (propertyNameBlacklist) {
+	            whiteBlackProperties = whiteBlackProperties.filter(function (property) {
+	               return propertyNameBlacklist.indexOf(property.getName()) === -1;
+	            });
+	         }
+
+	         this.whiteBlackProperties = whiteBlackProperties;
+	      }
+
+	      return whiteBlackProperties;
+	   },
+
 	   render: function render() {
 
 	      var props = this.props;
@@ -455,26 +486,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var editing = props.editing;
 	      var handleWantsEditProperty = props.onWantsEditProperty;
 	      var value = props.value;
-	      var propertyNameWhitelist = props.propertyNameWhitelist;
-	      var propertyNameBlacklist = props.propertyNameBlacklist || [];
-	      var properties;
+	      var properties = this.getWhiteBlackProperties();
 	      var value;
-
-	      // pull in explicity whitelisted or all
-	      if (propertyNameWhitelist) {
-	         properties = schema.getProperties().filter(function (property) {
-	            return propertyNameWhitelist.indexOf(property.getName()) !== -1;
-	         });
-	      } else {
-	         properties = schema.getProperties();
-	      }
-
-	      // filter out the blacklist
-	      if (propertyNameBlacklist) {
-	         properties = properties.filter(function (property) {
-	            return propertyNameBlacklist.indexOf(property.getName()) === -1;
-	         });
-	      }
 
 	      // render the property views
 	      var handleChangeProperty = this.props.onChangeProperty;
@@ -482,9 +495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var propertyViews = properties.map(function (propertySchema, i) {
 
 	         var propertyName = propertySchema.getName();
-
 	         var propertyValue = value ? value[propertyName] : undefined;
-
 	         var fn;
 
 	         if (handleChangeProperty) {
@@ -492,14 +503,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	         }
 
 	         return React.createElement(SchemaPropertyView, {
+	            ref: propertyName,
 	            key: i,
 	            schema: propertySchema,
 	            value: propertyValue,
 	            editMode: editMode,
 	            editable: editable,
 	            editing: editing,
-	            propertyViewerClass: props.propertyViewers[propertySchema.getName()],
-	            propertyEditorClass: props.propertyEditors[propertySchema.getName()],
+	            propertyViewerClass: props.propertyViewers[propertyName],
+	            propertyEditorClass: props.propertyEditors[propertyName],
 	            renderPropertyViewer: props.renderPropertyViewer,
 	            renderPropertyEditor: props.renderPropertyEditor,
 	            inlineCancelComponent: props.inlineCancelComponent,
@@ -524,6 +536,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   getSchema: function getSchema() {
 	      var schema = this.props.schema;
 	      return 'getProperties' in schema ? schema : new ObjectSchema(schema);
+	   },
+
+	   isValid: function isValid() {
+	      var refs = this.refs;
+	      return this.getSchema().getProperties().reduce(function (isValid, prop) {
+	         return isValid && refs[prop.getName()].isValid();
+	      }, true);
 	   }
 	});
 
@@ -20641,6 +20660,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.state.stagedValue !== undefined ? this.state.stagedValue : this.props.value;
 	   },
 
+	   isValid: function isValid() {
+	      var schema = this.getSchema();
+
+	      console.log(schema.isRequired(), this.getValue(), this.state.stagedValue, this.props.value);
+
+	      return schema.isRequired() ? this.getValue() !== undefined : true;
+	   },
+
 	   // this is meant to be used only in inline edit mode
 	   hasChanged: function hasChanged() {
 	      return this.getValue() !== this.props.value;
@@ -20896,6 +20923,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	PropertySchema.prototype.isSecure = function () {
 	   return this.definition.secure === true;
+	};
+
+	PropertySchema.prototype.isRequired = function () {
+	   return this.definition.required === true;
 	};
 
 	module.exports = PropertySchema;

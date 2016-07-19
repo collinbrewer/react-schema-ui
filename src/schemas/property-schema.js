@@ -24,4 +24,8 @@ PropertySchema.prototype.isSecure = function () {
    return this.definition.secure===true;
 };
 
+PropertySchema.prototype.isRequired = function () {
+   return this.definition.required===true;
+};
+
 module.exports=PropertySchema;

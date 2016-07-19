@@ -375,6 +375,14 @@ var SchemaPropertyView=React.createClass({
       return (this.state.stagedValue!==undefined ? this.state.stagedValue : this.props.value);
    },
 
+   isValid: function() {
+      var schema = this.getSchema();
+
+      console.log(schema.isRequired(), this.getValue(), this.state.stagedValue, this.props.value);
+
+      return schema.isRequired() ? this.getValue()!==undefined : true;
+   },
+
    // this is meant to be used only in inline edit mode
    hasChanged: function(){
       return (this.getValue()!==this.props.value);

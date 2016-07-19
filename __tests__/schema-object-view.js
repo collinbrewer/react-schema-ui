@@ -78,4 +78,17 @@ describe("SchemaObjectView", function(){
 
       expect(mockOnChange.mock.calls.length).toEqual(1);
    });
+
+   it('validates required properties', function(){
+      definition=JSON.parse(JSON.stringify(definition));
+      definition.properties[0].required=true;
+      var component=TestUtils.renderIntoDocument(
+         <SchemaObjectView
+            schema={definition}
+            value={{}}
+            editable={true} />
+      );
+
+      expect(component.isValid()).toBeFalsy();
+   });
 });
