@@ -11,6 +11,7 @@ var config = {
     publicPath: 'dist/',
     filename: 'react-schema-ui.js',
     sourceMapFilename: 'react-schema-ui.sourcemap.js',
+    library: 'react-schema-ui', 
     libraryTarget: 'umd'
   },
   module: {
@@ -23,11 +24,9 @@ var config = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  // externals: {
-  //   'react': 'React',
-  //   'react-motion': 'ReactMotion',
-  //   'react-measure': 'Measure'
-  // },
+  externals: {
+    'react': 'React'
+  },
 };
 
 if (TARGET === 'minify') {

@@ -2,6 +2,8 @@ var React=require("react");
 var SchemaObjectView=require("../../src/react-schema-ui.js").SchemaObjectView;
 var DateValueEditor=require("./date-value-editor.js");
 
+require('../../src/css/core.css');
+
 function customPropertyViewer(props) {
 
    if(props.schema.getName()==='age') {

@@ -3,11 +3,12 @@ var nodeModulesDir = path.resolve(__dirname, 'node_modules');
 
 module.exports = {
   entry: {
-    index: ['webpack/hot/dev-server', './demo/main.js']
+    main: ['webpack/hot/dev-server', './demo/main.js'],
+    'react-schema-ui': ['./src/react-schema-ui.js']
   },
   output: {
     path: './demo',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
     loaders: [
