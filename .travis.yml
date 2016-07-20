@@ -5,11 +5,10 @@ deploy:
   provider: npm
   email: collin@brewer-collective.com
   api_key:
-    secure: Yw4dKl+TKcou3cpXHbmzcz/RWFoGbW79yZ8+MQveJoTS5wYxRv7RAv4IEa57LJvNfrmlsemuuAlHKDaamB/+MY5qACYSfeGfnQ5ojH95iMR/T0eUsdXsx8K3xXcz/ii43QW8prJYuXkd8WBV4hgy9kZxQ7vNX5SZSztEe/YnbfKj18V/B84uoCx9Mnn1E5zDKJo0jK0+uNmsyyVryGEUL9KazPc2oj5OnU0UDsAlmVLtj5pZOaKiFZIqcdMwX65a680geZg3bG8C35gSqXr18d40oriavNMAIepWlY7dMhcSSMy+6g4EGhwxUhY5CZxNxPNkGf4Bjc20YqYgN6SHhZHBiLmCcHniKh36ZhWIo16ykQWGlL5dSLzWq5pWA7kn6jXLrVFUOHyKBl9647EURtRDLUs001j9+XwHt8uWtDtbfQFZrom5DEE+HNotVtAtTMrozdU6r6IQysusWltKkxDOxro9cJ7eW4cs4S/FCcYUkJ2c9EeKtP1sesyxPbg6QrsjIhkabnP1MvXwO/56N3h51qHd8J9XGhdQjsNo0xkT+arx3EonV7RKE+lcbexCM6nHCRLSgf3uSWrG8tVBa5K8LcGHOWpSpkLC48c2+b8upAaB9hqa7E+BT9aOnpe/mdtSeEvmzmDgs7E0EBsjf8he+NbTJIeW5HS+QQ1ueXU=
+    secure: iXujP5fbrocGZbG+X4lVHMuzLJEfmK21vHbzNC0n4LmToEB4wBHTRac04/KZIlI7CZ0/cNGOteUMDYha1HKuqJQJCiBr/vNA8e/eJeQxwrZUjubMX8rPT0/+pplFL/bWH1agwFoAGrdPWPBJfzB7tLnXO1w+1bZfKjYuIsyG/ZGPJq4jHaHFgLZaSPP2aiV56AuR8XT4ffnBgANKKoN8/WiwSLPhmo1GfIX1Elp1fgWHS95N0exFOoh1/0Fr/ehCR2/CaYaShZv/qBeHYVo6uJIiOwp0mDdiOKrw+tN+0jW2lnyqUzUAUtlHrVc9Vc77hZXs9ZdByPIDL56gPmkYRQg0pQraWDIZFp+Fg2muuupiyskD0cJ+hyBrBJdtmU+1OTMhANEdfN2iiF9hxwl1Ap7TNbasG+9mFgReuV+Alu7XVNfLWBflkWDgTEKkebuNnhPEmuN3gdCDMP/lSgH8bwLO4clxhp1ksn5ZGr3G6erPbitHvy2E2JZ/AbSIc38VgEI3TFz91vDKxpIqujRAI6aMgWMjt1np4bZ0NlBZcrO8Se/l/mcm+sGUTialKIdRa9032SI5K7zh7r/gfd845Z8lJ1sBi326ANzpS0E/UlIkl0HaV1md6yLDBn2RwdzrOyI2c0ly7YpmgOMjnFyPgQH18eXXKFAu8xI6hMCjJdE=
   on:
     tags: true
     repo: collinbrewer/react-schema-ui
-# Send coverage data to Coveralls
 after_script:
-- "npm run test:cov"
-- "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+- npm run test:cov
+- cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
