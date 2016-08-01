@@ -12,7 +12,7 @@
     "build:css": "cp -r ./src/css ./lib/css",
     "dist": "NODE_ENV=production npm run build && webpack --config webpack.prod.config.js",
     "prepublish": "npm run dist",
-    "dev": "webpack-dev-server --devtool eval --hot --progress --colors",
+    "dev": "webpack-dev-server --devtool eval --hot --progress --colors --port 6378",
     "test": "jest --verbose",
     "test:dev": "jest --watch",
     "test:cov": "jest --coverage"

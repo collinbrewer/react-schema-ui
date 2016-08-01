@@ -70,14 +70,14 @@ let TodoView=React.createClass({
          <ReactSchemaView
             schema={schema}
             editable={true}
-            value={todo}
+            value={this.props.todo}
             onChange={this.handleChange}
              />
       );
    }
 
    handleChange(e) {
-      todoStore.upsert(e.getValue()); // this will trickle back down
+      todoStore.upsert(e.getValue());
    }
 });
 ```

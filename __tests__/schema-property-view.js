@@ -257,6 +257,30 @@ describe("SchemaPropertyView", function(){
       expect(mockHandleChange).toBeCalledWith('new');
    });
 
+   it("confirms edit session on click(mouseDown) confirm", function(){
+
+      var mockHandleChange=jest.fn();
+
+      var component=TestUtils.renderIntoDocument(
+         <SchemaPropertyView
+            editMode={'inline'}
+            editable={true}
+            schema={definition}
+            value={'foo'}
+            onChange={mockHandleChange}/>
+      );
+
+      component.beginEditSession();
+      component.handleChange('new');
+
+      var node=TestUtils.findRenderedDOMComponentWithClass(component, 'rsui-inline-confirm');
+
+      TestUtils.Simulate.mouseDown(node);
+
+      expect(component.isEditing()).toBeFalsy();
+      expect(mockHandleChange).toBeCalledWith('new');
+   });
+
    it("cancels edit session on enter", function(){
 
       var component=TestUtils.renderIntoDocument(

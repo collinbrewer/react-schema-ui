@@ -203,7 +203,7 @@ var SchemaPropertyView=React.createClass({
 
       if(this.hasChanged())
       {
-         confirmControl=(<button className="rsui-inline-confirm" tabIndex="-1" onClick={this.confirmInlineEdit}>{inlineConfirmComponent}</button>);
+         confirmControl=(<button className="rsui-inline-confirm" tabIndex="-1" onMouseDown={this.confirmInlineEdit}>{inlineConfirmComponent}</button>);
       }
       else
       {
