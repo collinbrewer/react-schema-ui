@@ -378,8 +378,6 @@ var SchemaPropertyView=React.createClass({
    isValid: function() {
       var schema = this.getSchema();
 
-      console.log(schema.isRequired(), this.getValue(), this.state.stagedValue, this.props.value);
-
       return schema.isRequired() ? this.getValue()!==undefined : true;
    },
 
