@@ -1,39 +1,37 @@
-var Dispatcher=require("flux").Dispatcher;
-var dispatcher=new Dispatcher();
+var Dispatcher = require('flux').Dispatcher;
+var dispatcher = new Dispatcher();
 
-dispatcher.stagedEditors=[];
+dispatcher.stagedEditors = [];
 
 // manage editing session
-function updateEditSessions() {
-   dispatcher.stagedEditors=dispatcher.stagedEditors.filter(function(editor){
+function updateEditSessions () {
+	dispatcher.stagedEditors = dispatcher.stagedEditors.filter(function (editor) {
+		var keep = true;
 
-      var keep=true;
+		if (editor.isMounted()) {
+			if (!editor.hasFocus()) {
+				editor.endEditSession();
+			}
 
-      if(editor.isMounted()) {
-         if(!editor.hasFocus()) {
-            editor.endEditSession();
-         }
+			keep = editor.isEditing();
+		}
+		else {
+			keep = false;
+		}
 
-         keep=editor.isEditing();
-      }
-      else {
-         keep=false;
-      }
-
-      return keep;
-   });
+		return keep;
+	});
 }
 
 // poll for changes in focus
 setInterval(updateEditSessions, 250);
 
-dispatcher.register(function(payload){
-   if(payload.actionType==="beginEditSession") {
+dispatcher.register(function (payload) {
+	if (payload.actionType === 'beginEditSession') {
+		updateEditSessions();
 
-      updateEditSessions();
-
-      dispatcher.stagedEditors.push(payload.editor);
-   }
+		dispatcher.stagedEditors.push(payload.editor);
+	}
 });
 
-module.exports=dispatcher;
+module.exports = dispatcher;

@@ -1,94 +1,91 @@
-var React=require('react');
-var ReactDOM=require('react-dom');
-var TestUtils=require('react-addons-test-utils');
+/* global jest, expect */
 
-var SchemaObjectView=require('../src/schema-object-view.js');
-var SchemaPropertyView=require('../src/schema-property-view.js');
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
-var definition={
-   schemaType: 'object',
-   properties: [
-      {
-         'schemaType' : 'property',
-         'name':'name',
-         'type':'string',
-         'label': 'Label',
-         'placeholder' : 'placeholder',
-      },
-      {
-         'schemaType' : 'property',
-         'name':'name2',
-         'type':'boolean'
-      }
-   ]
+var SchemaObjectView = require('../src/schema-object-view.js');
+var SchemaPropertyView = require('../src/schema-property-view.js');
+
+var definition = {
+	schemaType: 'object',
+	properties: [
+		{
+			'schemaType': 'property',
+			'name': 'name',
+			'type': 'string',
+			'label': 'Label',
+			'placeholder': 'placeholder'
+		},
+		{
+			'schemaType': 'property',
+			'name': 'name2',
+			'type': 'boolean'
+		}
+	]
 };
 
-describe("SchemaObjectView", function(){
+describe('SchemaObjectView', function () {
+	it('renders the viewer', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaObjectView
+				schema={definition} />
+		);
 
-   it("renders the viewer", function(){
+		var node = ReactDOM.findDOMNode(component); // eslint-disable-line
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaObjectView
-            schema={definition} />
-      );
+		expect(node.textContent).toContain('Label');
+	});
 
-      var node=ReactDOM.findDOMNode(component);
+	it('renders only whitelisted properties', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaObjectView
+				propertyNameWhitelist={['name']}
+				schema={definition} />
+		);
 
-      expect(node.textContent).toContain("Label");
-   });
+		var propertyComponents = TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyView);
 
-   it("renders only whitelisted properties", function(){
+		expect(propertyComponents.length).toEqual(1);
+	});
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaObjectView
-            propertyNameWhitelist={['name']}
-            schema={definition} />
-      );
+	it("doesn't render blacklisted properties", function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaObjectView
+				propertyNameBlacklist={['name']}
+				schema={definition} />
+		);
 
-      var propertyComponents=TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyView);
+		var propertyComponents = TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyView);
 
-      expect(propertyComponents.length).toEqual(1);
-   });
+		expect(propertyComponents.length).toEqual(1);
+	});
 
-   it("doesn't render blacklisted properties", function(){
+	it('receives change property callback', function () {
+		var mockOnChange = jest.fn();
+		var component = TestUtils.renderIntoDocument(
+			<SchemaObjectView
+				schema={definition}
+				editable={true}
+				onChangeProperty={mockOnChange} />
+		);
+		var input = TestUtils.scryRenderedDOMComponentsWithTag(component, 'input')[0];
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaObjectView
-            propertyNameBlacklist={['name']}
-            schema={definition} />
-      );
+		TestUtils.Simulate.change(input, {value: 'a'});
 
-      var propertyComponents=TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyView);
+		expect(mockOnChange.mock.calls.length).toEqual(1);
+	});
 
-      expect(propertyComponents.length).toEqual(1);
-   });
+	it('validates required properties', function () {
+		definition = JSON.parse(JSON.stringify(definition));
+		definition.properties[0].required = true;
+		var component = TestUtils.renderIntoDocument(
+			<SchemaObjectView
+				schema={definition}
+				value={{}}
+				editable={true} />
+		);
 
-   it('receives change property callback', function(){
-
-      var mockOnChange=jest.fn();
-      var component=TestUtils.renderIntoDocument(
-         <SchemaObjectView
-            schema={definition}
-            editable={true}
-            onChangeProperty={mockOnChange} />
-      );
-      var input=TestUtils.scryRenderedDOMComponentsWithTag(component, 'input')[0];
-
-      TestUtils.Simulate.change(input, {value:'a'});
-
-      expect(mockOnChange.mock.calls.length).toEqual(1);
-   });
-
-   it('validates required properties', function(){
-      definition=JSON.parse(JSON.stringify(definition));
-      definition.properties[0].required=true;
-      var component=TestUtils.renderIntoDocument(
-         <SchemaObjectView
-            schema={definition}
-            value={{}}
-            editable={true} />
-      );
-
-      expect(component.isValid()).toBeFalsy();
-   });
+		expect(component.isValid()).toBeFalsy();
+	});
 });

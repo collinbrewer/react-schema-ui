@@ -1,28 +1,31 @@
-var React=require("react");
+var React = require('react');
 
 /**
  * Provides a full featured value viewer capable of handling most cases without
  * the need for a custom viewer.
  */
-var SchemaPropertyValueViewer=React.createClass({
+var SchemaPropertyValueViewer = React.createClass({
 
-   getDefaultProps: function(){
-      return {
-         "value" : "",
-         "displayType" : "string",
-      };
+   propTypes: {
+   	displayValue: React.PropTypes.string
    },
 
-   render: function(){
+	getDefaultProps: function () {
+		return {
+			'value': '',
+			'displayType': 'string'
+		};
+	},
 
-      var displayValue=this.props.displayValue;
+	render: function () {
+		var displayValue = this.props.displayValue;
 
-      return (
-         <div className={'rsui-property-value-viewer'}>
-            {displayValue}
-         </div>
-      );
-   }
+		return (
+			<div className={'rsui-property-value-viewer'}>
+				{displayValue}
+			</div>
+		);
+	}
 });
 
-module.exports=SchemaPropertyValueViewer;
+module.exports = SchemaPropertyValueViewer;

@@ -1,16 +1,17 @@
-var RSUISchema=require('../../src/schemas/rsui-schema.js');
+/* global expect */
+
+var RSUISchema = require('../../src/schemas/rsui-schema.js');
 
 describe('RSUISchema', () => {
+	it('can handle objects', () => {
+		var schema = new RSUISchema({schemaType: 'object'});
 
-   it('can handle objects', () => {
-      var schema=new RSUISchema({schemaType:'object'});
+		expect(schema.getProperties).toBeDefined();
+	});
 
-      expect(schema.getProperties).toBeDefined();
-   });
+	it('can handle properties', () => {
+		var schema = new RSUISchema({schemaType: 'property'});
 
-   it('can handle properties', () => {
-      var schema=new RSUISchema({schemaType:'property'});
-
-      expect(schema.getName).toBeDefined();
-   });
+		expect(schema.getName).toBeDefined();
+	});
 });

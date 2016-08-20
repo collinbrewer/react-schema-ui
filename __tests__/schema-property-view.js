@@ -1,370 +1,351 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-var TestUtils=require("react-addons-test-utils");
+/* global jest, expect */
 
-var SchemaPropertyValueEditor=require('../src/schema-property-value-editor.js');
-var SchemaPropertyView=require("../src/schema-property-view.js");
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
-var definition={
-   "schemaType" : "property",
-   "name":"firstName",
-   "type":"string",
-   "label": "Label",
-   "placeholder" : "placeholder",
+var SchemaPropertyValueEditor = require('../src/schema-property-value-editor.js');
+var SchemaPropertyView = require('../src/schema-property-view.js');
+
+var definition = {
+	'schemaType': 'property',
+	'name': 'firstName',
+	'type': 'string',
+	'label': 'Label',
+	'placeholder': 'placeholder'
 };
 
-describe("SchemaPropertyView", function(){
+describe('SchemaPropertyView', function () {
+	it('renders the placeholder', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				schema={definition} />
+		);
+
+		var node = ReactDOM.findDOMNode(component); // eslint-disable-line
 
-   it("renders the placeholder", function(){
+		expect(node.textContent).toContain('placeholder');
+	});
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            schema={definition} />
-      );
+	it('renders the label', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				schema={definition} />
+		);
 
-      var node=ReactDOM.findDOMNode(component);
+		var node = ReactDOM.findDOMNode(component); // eslint-disable-line
 
-      expect(node.textContent).toContain("placeholder");
-   });
+		expect(node.textContent).toContain('Label');
+	});
+
+	it('renders the string value viewer', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				schema={definition}
+				value={'foo'} />
+		);
 
-   it("renders the label", function(){
+		var node = ReactDOM.findDOMNode(component); // eslint-disable-line
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            schema={definition} />
-      );
+		expect(node.textContent).toContain('foo');
+	});
 
-      var node=ReactDOM.findDOMNode(component);
+	it('renders the date value viewer', function () {
+		let definition = {type: 'date'};
+		let value = new Date();
 
-      expect(node.textContent).toContain("Label");
-   });
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				schema={definition}
+				value={value} />
+		);
 
-   it("renders the string value viewer", function(){
+		var node = ReactDOM.findDOMNode(component); // eslint-disable-line
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            schema={definition}
-            value={'foo'} />
-      );
+		expect(node.textContent).toContain(value.toLocaleString());
+	});
 
-      var node=ReactDOM.findDOMNode(component);
+	it('renders the standard editor', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editable={true}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      expect(node.textContent).toContain("foo");
-   });
+		component = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-   it("renders the date value viewer", function(){
+		expect(component).toBeDefined();
+		expect(component.value).toEqual('foo');
+	});
 
-      let definition = {type:'date'};
-      let value = new Date();
+	it('renders the password editor', function () {
+		definition = JSON.parse(JSON.stringify(definition));
+		definition.secure = true;
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            schema={definition}
-            value={value} />
-      );
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editable={true}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      var node=ReactDOM.findDOMNode(component);
+		component = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      expect(node.textContent).toContain(value.toLocaleString());
-   });
+		expect(component.type).toEqual('password');
+	});
 
-   it("renders the standard editor", function(){
+	it('inline mode tracks changes', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true} />
+		);
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editable={true}
-            schema={definition}
-            value={'foo'} />
-      );
+		component.beginEditSession();
 
-      var component=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      expect(component).toBeDefined();
-      expect(component.value).toEqual('foo');
-   });
+		TestUtils.Simulate.change(node, {value: 'new'});
 
-   it("renders the password editor", function(){
+		expect(component.hasChanged()).toBeTruthy();
+	});
 
-      definition=JSON.parse(JSON.stringify(definition));
-      definition.secure=true;
+	it('begins inline edit session on click', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editable={true}
-            schema={definition}
-            value={'foo'} />
-      );
+		expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(0);
 
-      var component=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		var node = ReactDOM.findDOMNode(component); // eslint-disable-line
 
-      expect(component.type).toEqual('password');
-   });
+		TestUtils.Simulate.click(node);
 
-   it("inline mode tracks changes", function(){
+		expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(1);
+	});
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true} />
-      );
+	it('begins inline edit session on focus', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      component.beginEditSession();
+		expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(0);
 
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      TestUtils.Simulate.change(node, {value:'new'});
+		TestUtils.Simulate.focus(node);
 
-      expect(component.hasChanged()).toBeTruthy();
-   });
+		expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(1);
+	});
 
-   it("begins inline edit session on click", function(){
+	it('ends edit session on clean blur', function () {
+		jest.useRealTimers();
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            schema={definition}
-            value={'foo'} />
-      );
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(0);
+		component.beginEditSession();
 
-      var node=ReactDOM.findDOMNode(component);
+		expect(component.isEditing()).toBeTruthy();
 
-      TestUtils.Simulate.click(node);
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(1);
-   });
+		TestUtils.Simulate.blur(node);
 
-   it("begins inline edit session on focus", function(){
+		setTimeout(function () {
+			console.log('called!');
+			expect(component.isEditing()).toBeFalsy();
+		}, 500);
+	});
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            schema={definition}
-            value={'foo'} />
-      );
+	it('cancels edit on dirty blur cancel mode', function () {
+		jest.useRealTimers();
 
-      expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(0);
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				inlineBlurMode={'cancel'}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		component.beginEditSession();
+		component.handleChange('new');
 
-      TestUtils.Simulate.focus(node);
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      expect(TestUtils.scryRenderedComponentsWithType(component, SchemaPropertyValueEditor).length).toEqual(1);
-   });
+		TestUtils.Simulate.blur(node);
 
-   it("ends edit session on clean blur", function(){
+		setTimeout(function () {
+			expect(component.isEditing()).toBeFalsy();
+			expect(component.getValue()).toEqual('foo');
+		}, 500);
+	});
 
-      jest.useRealTimers();
+	it('confirms edit on dirty blur submit mode', function () {
+		jest.useRealTimers();
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            schema={definition}
-            value={'foo'} />
-      );
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				inlineBlurMode={'submit'}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      component.beginEditSession();
+		component.beginEditSession();
 
-      expect(component.isEditing()).toBeTruthy();
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		TestUtils.Simulate.change(node, {value: 'new'});
+		TestUtils.Simulate.blur(node);
 
-      TestUtils.Simulate.blur(node);
+		setTimeout(function () {
+			expect(component.isEditing()).toBeFalsy();
+			expect(component.getValue()).toEqual('new');
+		}, 500);
+	});
 
-      setTimeout(function(){
-         console.log('called!');
-         expect(component.isEditing()).toBeFalsy();
-      }, 500);
-   });
+	it('confirms edit session on enter', function () {
+		var mockHandleChange = jest.fn();
 
-   it("cancels edit on dirty blur cancel mode", function(){
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				schema={definition}
+				value={'foo'}
+				onChange={mockHandleChange}/>
+		);
 
-      jest.useRealTimers();
+		component.beginEditSession();
+		component.handleChange('new');
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            inlineBlurMode={'cancel'}
-            schema={definition}
-            value={'foo'} />
-      );
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      component.beginEditSession();
-      component.handleChange('new');
+		TestUtils.Simulate.keyDown(node, {keyCode: 13});
 
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		expect(component.isEditing()).toBeFalsy();
+		expect(mockHandleChange).toBeCalledWith('new');
+	});
 
-      TestUtils.Simulate.blur(node);
+	it('confirms edit session on click(mouseDown) confirm', function () {
+		var mockHandleChange = jest.fn();
 
-      setTimeout(function(){
-         expect(component.isEditing()).toBeFalsy();
-         expect(component.getValue()).toEqual('foo');
-      }, 500);
-   });
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				schema={definition}
+				value={'foo'}
+				onChange={mockHandleChange}/>
+		);
 
-   it("confirms edit on dirty blur submit mode", function(){
+		component.beginEditSession();
+		component.handleChange('new');
 
-      jest.useRealTimers();
+		var node = TestUtils.findRenderedDOMComponentWithClass(component, 'rsui-inline-confirm');
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            inlineBlurMode={'submit'}
-            schema={definition}
-            value={'foo'} />
-      );
+		TestUtils.Simulate.mouseDown(node);
 
-      component.beginEditSession();
+		expect(component.isEditing()).toBeFalsy();
+		expect(mockHandleChange).toBeCalledWith('new');
+	});
 
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+	it('cancels edit session on enter', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				schema={definition}
+				value={'foo'} />
+		);
 
-      TestUtils.Simulate.change(node, {value:'new'});
-      TestUtils.Simulate.blur(node);
+		component.beginEditSession();
 
-      setTimeout(function(){
-         expect(component.isEditing()).toBeFalsy();
-         expect(component.getValue()).toEqual('new');
-      }, 500);
-   });
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-   it("confirms edit session on enter", function(){
+		TestUtils.Simulate.change(node, {value: 'new'});
+		TestUtils.Simulate.keyDown(node, {keyCode: 27});
 
-      var mockHandleChange=jest.fn();
+		expect(component.getValue()).toEqual('foo');
+		expect(component.isEditing()).toBeFalsy();
+	});
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            schema={definition}
-            value={'foo'}
-            onChange={mockHandleChange}/>
-      );
+	it('should not use default editor with intercepted edit request', function () {
+		var mockedHandleWantsEdit = jest.fn().mockReturnValue(false);
 
-      component.beginEditSession();
-      component.handleChange('new');
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true}
+				onWantsEdit={mockedHandleWantsEdit} />
+		);
 
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		component.beginEditSession();
 
-      TestUtils.Simulate.keyDown(node, {keyCode:13});
+		expect(mockedHandleWantsEdit.mock.calls.length).toEqual(1);
+		expect(component.isEditing()).toBeFalsy();
+	});
 
-      expect(component.isEditing()).toBeFalsy();
-      expect(mockHandleChange).toBeCalledWith('new');
-   });
+	it('should not lose focus on clicking container', () => {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				editMode={'inline'}
+				editable={true} />
+		);
 
-   it("confirms edit session on click(mouseDown) confirm", function(){
+		component.beginEditSession();
 
-      var mockHandleChange=jest.fn();
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'label');
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            schema={definition}
-            value={'foo'}
-            onChange={mockHandleChange}/>
-      );
+		TestUtils.Simulate.mouseDown(node);
 
-      component.beginEditSession();
-      component.handleChange('new');
+		expect(component.isEditing()).toBeTruthy();
+	});
 
-      var node=TestUtils.findRenderedDOMComponentWithClass(component, 'rsui-inline-confirm');
+	it('should return valid for existing required', () => {
+		definition = JSON.parse(JSON.stringify(definition));
+		definition.required = true;
 
-      TestUtils.Simulate.mouseDown(node);
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				schema={definition}
+				value={'foo'}
+				editMode={'inline'}
+				editable={true} />
+		);
 
-      expect(component.isEditing()).toBeFalsy();
-      expect(mockHandleChange).toBeCalledWith('new');
-   });
+		expect(component.isValid()).toBeTruthy();
+	});
 
-   it("cancels edit session on enter", function(){
+	it('should return invalid for missing required', () => {
+		definition = JSON.parse(JSON.stringify(definition));
+		definition.required = true;
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            schema={definition}
-            value={'foo'} />
-      );
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyView
+				schema={definition}
+				editMode={'inline'}
+				editable={true} />
+		);
 
-      component.beginEditSession();
-
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-
-      TestUtils.Simulate.change(node, {value:'new'});
-      TestUtils.Simulate.keyDown(node, {keyCode:27});
-
-      expect(component.getValue()).toEqual('foo');
-      expect(component.isEditing()).toBeFalsy();
-   });
-
-   it("should not use default editor with intercepted edit request", function(){
-
-      var mockedHandleWantsEdit=jest.fn().mockReturnValue(false);
-
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true}
-            onWantsEdit={mockedHandleWantsEdit} />
-      );
-
-      component.beginEditSession();
-
-      expect(mockedHandleWantsEdit.mock.calls.length).toEqual(1);
-      expect(component.isEditing()).toBeFalsy();
-   });
-
-   it('should not lose focus on clicking container', () => {
-
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            editMode={'inline'}
-            editable={true} />
-      );
-
-      component.beginEditSession();
-
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'label');
-
-      TestUtils.Simulate.mouseDown(node);
-
-      expect(component.isEditing()).toBeTruthy();
-   });
-
-   it('should return valid for existing required', () => {
-
-      definition=JSON.parse(JSON.stringify(definition));
-      definition.required=true;
-
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            schema={definition}
-            value={'foo'}
-            editMode={'inline'}
-            editable={true} />
-      );
-
-      expect(component.isValid()).toBeTruthy();
-   });
-
-
-   it('should return invalid for missing required', () => {
-
-      definition=JSON.parse(JSON.stringify(definition));
-      definition.required=true;
-
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyView
-            schema={definition}
-            editMode={'inline'}
-            editable={true} />
-      );
-
-      expect(component.isValid()).toBeFalsy();
-   });
+		expect(component.isValid()).toBeFalsy();
+	});
 });

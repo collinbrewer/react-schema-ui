@@ -1,53 +1,51 @@
-var React=require('react');
-var TestUtils=require("react-addons-test-utils");
+/* global jest, expect */
 
-var SchemaPropertyValueEditor=require("../src/schema-property-value-editor.js");
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
-describe("PropertyValueEditor", function(){
+var SchemaPropertyValueEditor = require('../src/schema-property-value-editor.js');
 
-   it('should render a text input', function(){
+describe('PropertyValueEditor', function () {
+	it('should render a text input', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyValueEditor />
+		);
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyValueEditor />
-      );
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		expect(node.type).toEqual('text');
+	});
 
-      expect(node.type).toEqual('text');
-   });
+	it('should render a password input', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyValueEditor
+				displayType={'password'} />
+		);
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-   it('should render a password input', function(){
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyValueEditor
-            displayType={'password'} />
-      );
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+		expect(node.type).toEqual('password');
+	});
 
-      expect(node.type).toEqual('password');
-   });
+	it('should render a checkbox', function () {
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyValueEditor
+				displayType={'checkbox'} />
+		);
+		var node = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-   it('should render a checkbox', function(){
+		expect(node.type).toEqual('checkbox');
+	});
 
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyValueEditor
-            displayType={'checkbox'} />
-      );
-      var node=TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+	it('receives change property callback', function () {
+		var mockOnChange = jest.fn();
+		var component = TestUtils.renderIntoDocument(
+			<SchemaPropertyValueEditor
+				displayType={'checkbox'}
+				onChange={mockOnChange} />
+		);
+		var input = TestUtils.scryRenderedDOMComponentsWithTag(component, 'input')[0];
 
-      expect(node.type).toEqual('checkbox');
-   });
+		TestUtils.Simulate.change(input, {value: 'a'});
 
-   it('receives change property callback', function(){
-
-      var mockOnChange=jest.fn();
-      var component=TestUtils.renderIntoDocument(
-         <SchemaPropertyValueEditor
-            displayType={'checkbox'}
-            onChange={mockOnChange} />
-      );
-      var input=TestUtils.scryRenderedDOMComponentsWithTag(component, 'input')[0];
-
-      TestUtils.Simulate.change(input, {value:'a'});
-
-      expect(mockOnChange.mock.calls.length).toEqual(1);
-   });
+		expect(mockOnChange.mock.calls.length).toEqual(1);
+	});
 });
