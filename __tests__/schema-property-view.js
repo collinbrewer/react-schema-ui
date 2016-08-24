@@ -16,7 +16,7 @@ var definition = {
 };
 
 describe('SchemaPropertyView', function () {
-	it('renders the placeholder', function () {
+	it('should render the placeholder', function () {
 		var component = TestUtils.renderIntoDocument(
 			<SchemaPropertyView
 				schema={definition} />
@@ -95,7 +95,7 @@ describe('SchemaPropertyView', function () {
 		expect(component.type).toEqual('password');
 	});
 
-	it('inline mode tracks changes', function () {
+	it('should track changes in inline mode', function () {
 		var component = TestUtils.renderIntoDocument(
 			<SchemaPropertyView
 				editMode={'inline'}

@@ -85,7 +85,6 @@ var SchemaObjectView = React.createClass({
 
 			return (
 				<SchemaPropertyView
-					ref={propertyName}
 					key={i}
 					schema={propertySchema}
 					value={propertyValue}
@@ -100,7 +99,8 @@ var SchemaObjectView = React.createClass({
 					inlineConfirmComponent={props.inlineConfirmComponent}
 					displayValueTransformer={props.displayValueTransformer}
 					onWantsEdit={handleWantsEditProperty}
-					onChange={fn} />
+					onChange={fn}
+					/>
 			);
 		});
 
@@ -125,9 +125,14 @@ var SchemaObjectView = React.createClass({
 	},
 
 	isValid: function () {
-		var refs = this.refs;
-		return this.getSchema().getProperties().reduce((isValid, prop) => {
-			return isValid && refs[prop.getName()].isValid();
+		let {value} = this.props;
+		let schema = this.getSchema();
+
+		return schema.getProperties().reduce((isValid, propertySchema) => {
+			var propertyName = propertySchema.getName();
+			var propertyValue = value ? value[propertyName] : undefined;
+
+			return isValid && (propertySchema.isRequired() ? propertyValue !== undefined : true);
 		}, true);
 	}
 });

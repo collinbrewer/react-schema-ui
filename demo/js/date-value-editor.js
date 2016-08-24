@@ -15,6 +15,7 @@ var DateValueEditor = React.createClass({
 	render: function () {
 		return (
 			<div>
+				<a href='#' onClick={this.handleClickClearDate}>clear</a><br />
 				{this.renderMonthPicker()}
 				{this.renderDatePicker()}
 				{this.renderYearPicker()}
@@ -75,6 +76,12 @@ var DateValueEditor = React.createClass({
 				})}
 			</select>
 		);
+	},
+
+	handleClickClearDate: function (e) {
+		e && e.preventDefault();
+
+		this.props.onChange(undefined);
 	},
 
 	handleChangeMonth: function (e) {

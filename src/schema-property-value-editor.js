@@ -43,7 +43,7 @@ var SchemaPropertyValueEditor = React.createClass({
 	},
 
 	componentDidMount: function () {
-		this.props.autoFocus && this.refs.input.focus();
+		this.props.autoFocus && this.input.focus();
 	},
 
 	render: function () {
@@ -72,7 +72,7 @@ var SchemaPropertyValueEditor = React.createClass({
 
 			propertyValueEditor = (
 				<input
-					ref='input'
+					ref={(node) => { this.input = node; }}
 					className={className}
 					type={displayType}
 					placeholder={placeholder}

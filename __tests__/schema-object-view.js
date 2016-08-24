@@ -76,7 +76,7 @@ describe('SchemaObjectView', function () {
 		expect(mockOnChange.mock.calls.length).toEqual(1);
 	});
 
-	it('validates required properties', function () {
+	it('should validate required properties', function () {
 		definition = JSON.parse(JSON.stringify(definition));
 		definition.properties[0].required = true;
 		var component = TestUtils.renderIntoDocument(

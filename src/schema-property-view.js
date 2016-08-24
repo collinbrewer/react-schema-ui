@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var classnames = require('classnames');
 // var JSONPointer = require('json-pointer');
 
@@ -35,7 +34,9 @@ var defaultDisplayValueTransformer = function (property, value, transformer) {
 		}
 	}
 
-	return transformer(property, value, displayValue);
+	displayValue = transformer(property, value, displayValue);
+
+	return (displayValue ? '' + displayValue : displayValue);
 };
 
 var SchemaPropertyView = React.createClass({
@@ -77,17 +78,18 @@ var SchemaPropertyView = React.createClass({
 
 	getInitialState: function () {
 		return {
-			'editing': this.props.editing
+			editing: this.props.editing,
+			stagedValue: this.props.value
 		};
 	},
 
-	// componentWillReceiveProps: function(nextProps){
-	//	 if(this.props.value!==nextProps.value) {
-	//		 this.setState({
-	//			 stagedValue: undefined
-	//		 });
-	//	 }
-	// },
+	componentWillReceiveProps: function (nextProps) {
+		if (this.props.value !== nextProps.value) {
+			this.setState({
+				stagedValue: nextProps.value
+			});
+		}
+	},
 
 	render: function () {
 		var props = this.props;
@@ -95,7 +97,7 @@ var SchemaPropertyView = React.createClass({
 		var editable = this.props.editable;
 		var editing = this.state.editing;
 		var schema = this.getSchema();
-		var value = this.state.stagedValue || this.props.value;
+		var value = this.state.stagedValue;// || this.props.value;
 		var displayName = schema.getLabel();
 		// var placeholder = schema.getPlaceholder();
 		var inlineEditingControls;
@@ -123,7 +125,8 @@ var SchemaPropertyView = React.createClass({
 		var editorContainer;
 
 		if (editMode === 'inline' && editable && !editing) {
-			focusInput = (<input ref='fakeInput' onFocus={this.handleFocus} style={{position: 'absolute', opacity: 0}} />);
+			// focusInput = (<input ref='fakeInput' onFocus={this.handleFocus} style={{position: 'absolute', opacity: 0}} />);
+			focusInput = (<input ref={(node) => { this.fakeInput = node; }} onFocus={this.handleFocus} style={{position: 'absolute', opacity: 0}} />);
 		}
 
 		if ((editMode === 'inline' ? editing : editable)) {
@@ -147,7 +150,8 @@ var SchemaPropertyView = React.createClass({
 				className={className}
 				onMouseDown={this.handleMouseDownContainer}
 				onClick={this.handleClickContainer}
-				ref='container'>
+				ref={(node) => { this.container = node; }}
+				>
 				<label className='rsui-property-label' htmlFor={schema.getName()}>{displayName}</label>
 				{focusInput}
 				<div className='rsui-property-value-container'>
@@ -192,7 +196,6 @@ var SchemaPropertyView = React.createClass({
 		var props = this.props;
 		var schema = this.getSchema();
 		var editorProps = {
-			ref: schema.getName(),
 			value: this.getValue(),
 			displayType: getDisplayTypeForProperty(schema),
 			placeholder: props.placeholder,
@@ -298,7 +301,7 @@ var SchemaPropertyView = React.createClass({
 			});
 		}
 		else {
-			this.refs.fakeInput.blur();
+			this.fakeInput.blur();
 			// this.refs.container.blur();
 			e && e.preventDefault();
 		}
@@ -324,7 +327,7 @@ var SchemaPropertyView = React.createClass({
 	 */
 	hasFocus: function () {
 		var el = document.activeElement;
-		var us = ReactDOM.findDOMNode(this.refs.container); // eslint-disable-line
+		var us = this.container;
 		while (el = el.parentElement) { // eslint-disable-line
 			if (el === us) {
 				return true;
@@ -345,17 +348,17 @@ var SchemaPropertyView = React.createClass({
 
 		if (this.props.editMode === 'inline') {
 			this.setState({
-				stagedValue: undefined,
+				// stagedValue: this.props.value,
 				editing: false
 			});
 
-			this.props.onChange(this.getValue());
+			this.props.onChange(this.state.stagedValue); // now props.value and state.stagedValue should be in sync
 		}
 	},
 
 	cancelInlineEdit: function () {
 		this.setState({
-			stagedValue: undefined, // revert
+			stagedValue: this.props.value, // revert
 			editing: false
 		});
 	},
@@ -366,7 +369,7 @@ var SchemaPropertyView = React.createClass({
 	},
 
 	getValue: function () {
-		return (this.state.stagedValue !== undefined ? this.state.stagedValue : this.props.value);
+		return this.state.stagedValue;// || this.props.value;//(this.state.stagedValue !== undefined ? this.state.stagedValue : this.props.value);
 	},
 
 	isValid: function () {
@@ -377,7 +380,8 @@ var SchemaPropertyView = React.createClass({
 
 	// this is meant to be used only in inline edit mode
 	hasChanged: function () {
-		return (this.getValue() !== this.props.value);
+		return true;
+		// return (this.state.stagedValue !== this.props.value);
 	}
 });
 
