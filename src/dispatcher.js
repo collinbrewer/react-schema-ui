@@ -9,7 +9,7 @@ function updateEditSessions () {
 		var keep = true;
 
 		if (editor.isMounted()) {
-			if (!editor.hasFocus()) {
+			if (!editor.hasFocus() && document.activeElement.tagName.toLowerCase() !== 'body') {
 				editor.endEditSession();
 			}
 

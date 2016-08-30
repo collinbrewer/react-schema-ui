@@ -11,7 +11,7 @@
     "build:js": "babel src --out-dir lib",
     "build:css": "cp -r ./src/css ./lib/css",
     "dist": "NODE_ENV=production npm run build && webpack --config webpack.prod.config.js",
-    "prepublish": "npm run dist",
+    "prepublish": "npm run build && npm run dist",
     "dev": "webpack-dev-server --devtool eval --hot --progress --colors --port 6378",
     "test": "jest --verbose",
     "test:watch": "jest --watch",
