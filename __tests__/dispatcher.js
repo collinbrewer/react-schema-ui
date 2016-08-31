@@ -25,6 +25,7 @@ describe('dispatcher', () => {
 
 	it('should end previous editing session', () => {
 		let mockEditor = createMockEditor();
+
 		dispatcher.dispatch({actionType: 'beginEditSession', editor: mockEditor});
 		dispatcher.dispatch({actionType: 'beginEditSession', editor: createMockEditor()});
 

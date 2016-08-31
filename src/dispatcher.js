@@ -5,11 +5,13 @@ dispatcher.stagedEditors = [];
 
 // manage editing session
 function updateEditSessions () {
+	let activeElement = document.activeElement.tagName.toLowerCase();
+
 	dispatcher.stagedEditors = dispatcher.stagedEditors.filter(function (editor) {
 		var keep = true;
 
 		if (editor.isMounted()) {
-			if (!editor.hasFocus() && document.activeElement.tagName.toLowerCase() !== 'body') {
+			if (!editor.hasFocus() && (dispatcher.stagedEditors.length === 1 || activeElement !== 'body')) {
 				editor.endEditSession();
 			}
 
